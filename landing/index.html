@@ -5,270 +5,421 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cut 70–90% off your LLM bill — ai.acan.ccwu.cc</title>
 <meta name="description" content="Audit your AI API traffic and route each task to the cheapest model that still works. Same prompts, same quality, a fraction of the cost. Open-source CLI + paid setup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0b0e14;--card:#141823;--line:#262d3a;--txt:#e6e9ef;--mut:#9aa4b2;--blu:#4dabf7;--grn:#51cf66}
+  :root{
+    --paper:#faf8f5;
+    --paper-2:#f3efe8;
+    --ink:#1b1a17;
+    --ink-soft:#46433c;
+    --mut:#857f74;
+    --line:#e6e0d6;
+    --line-strong:#d6cebf;
+    --accent:#15794e;
+    --accent-weak:#e7f1ea;
+    --term-bg:#1b1a17;
+    --term-txt:#e9e4d8;
+    --term-dim:#9a9486;
+    --term-red:#f0a6a0;
+    --term-grn:#8fd6ad;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--txt);font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;padding:0 20px}
-  .wrap{max-width:920px;margin:0 auto;padding:56px 0}
-  nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}
-  nav .logo{font-weight:800;letter-spacing:.3px}
-  nav a.gh{color:var(--mut);text-decoration:none;font-size:14px}
-  nav a.gh:hover{color:var(--blu)}
-  h1{font-size:42px;line-height:1.12;margin-bottom:14px}
-  h1 .em{color:var(--grn)}
-  .sub{font-size:18px;color:var(--mut);margin-bottom:28px;max-width:660px}
-  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
-  a.btn{background:var(--blu);color:#06121f;font-weight:700;padding:12px 22px;border-radius:8px;text-decoration:none;font-size:15px}
-  a.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
-  section{margin:56px 0}
-  h2{font-size:26px;margin-bottom:18px}
-  h3{font-size:17px;margin-bottom:8px;color:var(--blu)}
-  p.mut{color:var(--mut);font-size:14px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
-  .card p{font-size:14px;color:var(--mut)}
-  .calc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
-  .row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
-  .fld{display:flex;flex-direction:column;gap:6px}
-  .fld label{font-size:13px;color:var(--mut)}
-  .fld input,.fld select{padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:#0e1219;color:var(--txt);font-size:14px;min-width:180px}
-  .out{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
-  .obox{background:#0e1219;border:1px solid var(--line);border-radius:10px;padding:16px}
-  .obox .big{font-size:26px;font-weight:800}
-  .obox .lbl{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px}
-  .save{color:var(--grn)}
-  .note{font-size:12px;color:var(--mut);margin-top:12px}
-  .steps{counter-reset:s;display:grid;gap:14px}
-  .step{display:flex;gap:14px;align-items:flex-start}
-  .step .n{counter-increment:s;flex:0 0 32px;height:32px;border-radius:50%;background:var(--blu);color:#06121f;font-weight:800;display:flex;align-items:center;justify-content:center}
-  .step .n::before{content:counter(s)}
-  .step div p{font-size:14px;color:var(--mut)}
-  .price{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-  .ptier{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column}
-  .ptier.feat{border-color:var(--blu)}
-  .ptier .pp{font-size:22px;font-weight:800;margin:8px 0}
-  .ptier ul{list-style:none;margin:10px 0;font-size:13px;color:var(--mut)}
-  .ptier li{margin:6px 0;padding-left:18px;position:relative}
-  .ptier li::before{content:"✓";position:absolute;left:0;color:var(--grn)}
-  .trust{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
-  .trust .trow{display:flex;gap:12px;margin:12px 0;align:flex-start}
-  .trust .trow .ic{color:var(--grn);font-weight:800}
-  .trust .trow p{font-size:14px;color:var(--mut)}
-  .trust .trow b{color:var(--txt)}
-  .warn{background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:14px;font-size:13px;color:#ffc9c9;margin-top:14px}
-  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:10px 0}
-  summary{cursor:pointer;font-weight:600;font-size:15px}
-  details p{font-size:14px;color:var(--mut);margin-top:8px}
-  .final{background:linear-gradient(180deg,#10243a,#0e1219);border:1px solid var(--blu);border-radius:14px;padding:36px 32px;text-align:center;max-width:680px;margin:0 auto}
-  .final h2{margin-bottom:10px}
-  .final p{margin-bottom:16px;line-height:1.5}
-  .final a.btn{margin-top:14px;display:inline-block}
-  .contact{max-width:680px;margin:0 auto 40px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:32px}
-  .contact h2{margin-bottom:6px}
-  .contact .mut{margin-bottom:18px}
-  form{text-align:left}
-  form .fld{margin-bottom:14px}
-  form label{font-size:13px;color:var(--mut);margin-bottom:6px;display:block}
-  form input,form select,form textarea{width:100%;background:#0b0e14;border:1px solid var(--line);border-radius:8px;padding:11px 12px;color:var(--txt);font-size:14px;font-family:inherit;box-sizing:border-box}
-  form input:focus,form select:focus,form textarea:focus{outline:none;border-color:var(--blu)}
-  form textarea{resize:vertical;min-height:92px}
-  form .submit{width:100%;background:var(--blu);color:#06121f;font-weight:700;padding:13px;border:none;border-radius:8px;font-size:15px;cursor:pointer;margin-top:4px;font-family:inherit}
-  form .submit:hover{opacity:.92}
-  .form-note{font-size:12px;color:var(--mut);margin-top:14px;text-align:center}
-  footer{margin-top:48px;color:var(--mut);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
-  code{background:#0e1219;padding:2px 6px;border-radius:4px;color:#a5d8ff;font-size:13px}
-  a.link{color:var(--blu);text-decoration:none}
-  a.link:hover{text-decoration:underline}
-  @media (max-width:640px){
-    body{padding:0 16px}
-    .wrap{padding:36px 0}
-    h1{font-size:30px}
-    .sub{font-size:16px}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    padding:0 22px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 0 80px}
+  .wide{max-width:1080px;margin:0 auto;padding:0}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;letter-spacing:-0.01em;color:var(--ink)}
+  h1{font-size:clamp(2.3rem,5.4vw,3.6rem);line-height:1.06;margin-bottom:22px}
+  h2{font-size:clamp(1.6rem,3vw,2.1rem);line-height:1.15;margin-bottom:14px}
+  h3{font-size:1.18rem;margin-bottom:6px}
+  p{color:var(--ink-soft)}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .eyebrow{font-family:"Inter",sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .lead{font-size:1.18rem;color:var(--ink-soft);max-width:38rem;margin-bottom:30px}
+
+  /* NAV */
+  nav{display:flex;justify-content:space-between;align-items:center;padding:26px 0;border-bottom:1px solid var(--line);margin-bottom:64px}
+  .logo{font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;letter-spacing:-0.01em;display:flex;align-items:center;gap:9px}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+  nav .gh{font-size:.92rem;color:var(--mut);font-weight:500}
+  nav .gh:hover{color:var(--accent);text-decoration:none}
+
+  /* HERO */
+  .hero{margin-bottom:14px}
+  .cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;font-weight:600;font-size:1rem;padding:13px 24px;border-radius:9px;text-decoration:none;transition:background .15s ease}
+  .btn:hover{background:#0f5e3c;text-decoration:none}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong);font-weight:600}
+  .btn.ghost:hover{border-color:var(--ink);background:transparent;text-decoration:none}
+
+  /* TERMINAL */
+  .term{background:var(--term-bg);border-radius:12px;padding:22px 24px;margin:40px 0 0;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.65;color:var(--term-txt);overflow-x:auto;box-shadow:0 18px 40px -22px rgba(27,26,23,.5)}
+  .term .dim{color:var(--term-dim)}
+  .term .red{color:var(--term-red)}
+  .term .grn{color:var(--term-grn)}
+  .term .pr{color:#c9c2b2}
+  .term .bar{color:var(--term-dim)}
+
+  /* METRICS */
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:72px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .metrics .m{padding:30px 24px;border-right:1px solid var(--line)}
+  .metrics .m:last-child{border-right:none}
+  .metrics .num{font-family:"Fraunces",serif;font-size:2.1rem;font-weight:500;color:var(--ink);line-height:1}
+  .metrics .lab{font-size:.9rem;color:var(--mut);margin-top:8px}
+
+  /* SECTION */
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+  .sec-head{margin-bottom:34px;max-width:40rem}
+  .sec-head .eyebrow{margin-bottom:12px}
+
+  /* STEPS */
+  .steps{display:grid;gap:0}
+  .step{display:grid;grid-template-columns:54px 1fr;gap:22px;padding:22px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .step .n{font-family:"Fraunces",serif;font-size:1.4rem;color:var(--accent);font-weight:500}
+  .step p{font-size:.98rem}
+  code{background:var(--paper-2);padding:2px 6px;border-radius:5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var(--ink)}
+
+  /* FEATURES (restrained bento) */
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .feat .cell{padding:24px 26px 24px 0;border-top:1px solid var(--line)}
+  .feat .cell:nth-child(odd){padding-right:30px}
+  .feat .cell:nth-child(even){padding-left:30px;border-left:1px solid var(--line)}
+  .feat .cell p{font-size:.95rem;color:var(--ink-soft)}
+
+  /* CALC */
+  .calc{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:30px}
+  .row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:18px}
+  .fld{display:flex;flex-direction:column;gap:7px}
+  .fld label{font-size:.82rem;color:var(--mut);font-weight:500}
+  .fld input,.fld select{padding:10px 12px;border-radius:8px;border:1px solid var(--line-strong);background:#fff;color:var(--ink);font-size:.95rem;min-width:190px;font-family:inherit}
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent)}
+  .out{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  .obox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .obox .big{font-family:"Fraunces",serif;font-size:1.7rem;font-weight:500;line-height:1.1}
+  .obox .lbl{font-size:.74rem;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+  .obox .save{color:var(--accent)}
+  .note{font-size:.82rem;color:var(--mut);margin-top:14px}
+
+  /* PRICING */
+  .price{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .ptier{background:#fff;border:1px solid var(--line);border-radius:13px;padding:26px 24px;display:flex;flex-direction:column}
+  .ptier.feat{border:1px solid var(--accent);box-shadow:0 14px 36px -26px rgba(21,121,78,.6)}
+  .ptier .tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
+  .ptier .pp{font-family:"Fraunces",serif;font-size:1.9rem;font-weight:500;margin:4px 0 2px}
+  .ptier ul{list-style:none;margin:14px 0 0;font-size:.92rem;color:var(--ink-soft)}
+  .ptier li{margin:9px 0;padding-left:20px;position:relative}
+  .ptier li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--accent-weak);border:1.5px solid var(--accent)}
+  .ptier .foot{font-size:.82rem;color:var(--mut);margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+
+  /* TRUST / POV */
+  .pov{background:var(--ink);color:#e9e4d8;border-radius:16px;padding:40px 36px}
+  .pov h2{color:#fff}
+  .pov p{color:#c7c1b3}
+  .pov .eyebrow{color:var(--term-grn)}
+  .pov .trow{display:grid;grid-template-columns:26px 1fr;gap:12px;margin:16px 0;align-items:start}
+  .pov .trow .ic{color:var(--term-grn);font-weight:700}
+  .pov .trow b{color:#fff}
+  .pov .quote{font-family:"Fraunces",serif;font-size:1.25rem;line-height:1.45;color:#fff;margin:0 0 6px}
+  .pov .small{font-size:.85rem;color:var(--term-dim);margin-top:22px;border-top:1px solid #34322c;padding-top:18px}
+
+  /* FAQ */
+  details{border-bottom:1px solid var(--line);padding:4px 0}
+  summary{cursor:pointer;font-weight:500;font-size:1.02rem;padding:16px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--mut);font-size:1.4rem;font-weight:400;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{font-size:.95rem;color:var(--ink-soft);padding:0 0 18px;max-width:42rem}
+
+  /* CONTACT */
+  .contact{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:38px 34px}
+  .contact h2{margin-bottom:8px}
+  .contact .sub2{color:var(--mut);font-size:.98rem;margin-bottom:24px}
+  form .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  form label{font-size:.84rem;color:var(--ink-soft);font-weight:500;margin-bottom:7px;display:block}
+  form input,form select,form textarea{width:100%;background:#fff;border:1px solid var(--line-strong);border-radius:9px;padding:12px 13px;color:var(--ink);font-size:.95rem;font-family:inherit;box-sizing:border-box}
+  form input:focus,form select:focus,form textarea:focus{outline:none;border-color:var(--accent)}
+  form textarea{resize:vertical;min-height:96px}
+  form .submit{width:100%;background:var(--accent);color:#fff;font-weight:600;padding:14px;border:none;border-radius:9px;font-size:1rem;cursor:pointer;margin-top:6px;font-family:inherit;transition:background .15s ease}
+  form .submit:hover{background:#0f5e3c}
+  .form-note{font-size:.82rem;color:var(--mut);margin-top:16px;text-align:center}
+
+  /* FINAL */
+  .final{text-align:center;padding:8px 0 0}
+  .final .lead{margin:0 auto 26px}
+
+  footer{margin-top:64px;border-top:1px solid var(--line);padding-top:26px;color:var(--mut);font-size:.85rem;line-height:1.7}
+  footer a{color:var(--mut)}
+
+  @media (max-width:680px){
+    body{padding:0 18px;font-size:16px}
+    nav{margin-bottom:44px;padding:20px 0}
+    h1{font-size:clamp(2rem,8vw,2.6rem)}
+    .metrics{grid-template-columns:1fr}
+    .metrics .m{border-right:none;border-bottom:1px solid var(--line)}
+    .metrics .m:last-child{border-bottom:none}
+    .feat{grid-template-columns:1fr}
+    .feat .cell{padding:20px 0!important;border-left:none!important}
     .out{grid-template-columns:1fr}
+    .price{grid-template-columns:1fr}
     .fld input,.fld select{min-width:0;width:100%}
-    .row{gap:12px}
-    nav{margin-bottom:32px}
+    .row{gap:14px}
+    form .grid2{grid-template-columns:1fr}
+    .pov{padding:30px 22px}
+    .calc{padding:22px}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <nav>
-    <div class="logo">ai-cost-audit</div>
-    <a class="gh" href="https://github.com/acan-ai/ai-cost-audit" target="_blank" rel="noopener">GitHub ★</a>
+    <div class="logo"><span class="dot"></span>ai-cost-audit</div>
+    <a class="gh" href="https://github.com/huocan007/ai-cost-audit" target="_blank" rel="noopener">GitHub ↗</a>
   </nav>
 
-  <h1>Cut <span class="em">70–90%</span> off your LLM bill.<br>Same prompts. Same quality. A fraction of the cost.</h1>
-  <p class="sub">Most teams route every call to one flagship model and overpay 5–100×. We audit your traffic, route each task to the cheapest model that still does the job (DeepSeek / Kimi / Qwen instead of GPT / Claude), and keep quality gates in place. You pay less — not worse.</p>
-  <div class="cta">
-    <a class="btn" href="https://github.com/acan-ai/ai-cost-audit" target="_blank" rel="noopener">★ Try the open-source CLI</a>
-    <a class="btn ghost" href="#contact">Book a free audit</a>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">AI spend optimization</div>
+    <h1>You're paying GPT&#8209;4o prices for work a $0.14 model does just as well.</h1>
+    <p class="lead">We audit your real API traffic and route each task to the cheapest model that still meets your quality bar — DeepSeek, Kimi, or Qwen instead of GPT or Claude. Same prompts. Same output. 70–90% less.</p>
+    <div class="cta">
+      <a class="btn" href="https://github.com/huocan007/ai-cost-audit" target="_blank" rel="noopener">Try the free CLI</a>
+      <a class="btn ghost" href="#contact">Book a free audit</a>
+    </div>
+
+    <div class="term" aria-label="example CLI output">
+<span class="pr">$</span> pip install ai-cost-audit<br>
+<span class="pr">$</span> ai-cost-audit --logs july.jsonl<br>
+<br>
+<span class="dim">  Model used today</span>&nbsp;&nbsp;&nbsp;&nbsp;GPT-4o<br>
+<span class="dim">  Current spend</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="red">$2,140 / month</span><br>
+<span class="bar">  ────────────────────────────────</span><br>
+<span class="dim">  Routed → DeepSeek</span>&nbsp;&nbsp;&nbsp;<span class="grn">$86 / month</span><br>
+<span class="dim">  Routed → Kimi K2.6</span>&nbsp;&nbsp;&nbsp;<span class="grn">$252 / month</span><br>
+<span class="bar">  ────────────────────────────────</span><br>
+<span class="dim">  Potential saving</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="grn">up to 96%</span><br>
+<span class="dim">  Recommended</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S2 · routing setup
+    </div>
   </div>
 
-  <!-- ROI CALCULATOR -->
-  <section class="calc">
-    <h2 style="font-size:20px">Calculate your saving — in one command's worth of inputs</h2>
-    <p class="mut" style="margin-bottom:16px">Use your own monthly token counts. Prices are public 2026-07 list rates (DeepSeek V4-Flash: $0.14/$0.28 per M; Kimi K2.6: $0.95/$4.00 per M; GPT-4o: $2.50/$10.00 per M).</p>
-    <div class="row">
-      <div class="fld">
-        <label>Currently using</label>
-        <select id="cur">
-          <option value="gpt-4o">GPT-4o</option>
-          <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
-          <option value="claude-opus-4.8">Claude Opus 4.8</option>
-        </select>
-      </div>
-      <div class="fld">
-        <label>Prompt tokens / month (millions)</label>
-        <input id="pt" type="number" value="20" min="0" step="1">
-      </div>
-      <div class="fld">
-        <label>Completion tokens / month (millions)</label>
-        <input id="ct" type="number" value="5" min="0" step="1">
-      </div>
-    </div>
-    <div class="out">
-      <div class="obox">
-        <div class="lbl">Your bill now</div>
-        <div class="big" id="curCost">$0</div>
-        <div class="lbl" id="curName">—</div>
-      </div>
-      <div class="obox">
-        <div class="lbl">Routed to DeepSeek V4-Flash</div>
-        <div class="big save" id="dsCost">$0</div>
-        <div class="lbl" id="dsSave">save —</div>
-      </div>
-      <div class="obox">
-        <div class="lbl">Routed to Kimi K2.6 (balanced)</div>
-        <div class="big save" id="kimiCost">$0</div>
-        <div class="lbl" id="kimiSave">save —</div>
-      </div>
-      <div class="obox">
-        <div class="lbl">Annual saving (DeepSeek floor)</div>
-        <div class="big save" id="annual">$0</div>
-        <div class="lbl">vs your current plan</div>
-      </div>
-    </div>
-    <p class="note">Estimates from list prices; your real mix may differ. The open-source CLI does this from your actual logs — no guessing.</p>
-  </section>
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="m"><div class="num">70–90%</div><div class="lab">typical savings on routine calls</div></div>
+    <div class="m"><div class="num">$0</div><div class="lab">to start — the CLI is open-source</div></div>
+    <div class="m"><div class="num">1 line</div><div class="lab">of code to integrate (change <code style="background:transparent;padding:0;color:var(--ink)">base_url</code>)</div></div>
+  </div>
 
   <!-- HOW IT WORKS -->
   <section>
-    <h2>How it works</h2>
+    <div class="sec-head">
+      <div class="eyebrow">How it works</div>
+      <h2>Three steps. No rebuild.</h2>
+    </div>
     <div class="steps">
-      <div class="step"><div class="n"></div><div><h3>1 · Audit your traffic</h3><p>We map your real API calls, tag each task type, and show exactly where you're overpaying — a written report with numbers, not vibes.</p></div></div>
-      <div class="step"><div class="n"></div><div><h3>2 · Deploy a one-line gateway</h3><p>A self-hosted LiteLLM gateway routes by task type, with quality gates and automatic fallback to a flagship model when a task truly needs it. You change <code>base_url</code> — nothing else in your code.</p></div></div>
-      <div class="step"><div class="n"></div><div><h3>3 · We tune it monthly</h3><p>As models and prices shift, we re-route and re-tune so your bill stays low without you babysitting it. Quality gates + budget caps included.</p></div></div>
+      <div class="step"><div class="n">1</div><div><h3>Audit your traffic</h3><p>We map your real API calls, tag each task type, and show exactly where you're overpaying — a written report with numbers, not vibes.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3>Deploy a one-line gateway</h3><p>A self-hosted LiteLLM gateway routes by task type, with quality gates and automatic fallback to a flagship model when a task truly needs it. You change <code>base_url</code> — nothing else in your code.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h3>We tune it monthly</h3><p>As models and prices shift, we re-route and re-tune so your bill stays low without you babysitting it. Quality gates and budget caps included.</p></div></div>
     </div>
   </section>
 
   <!-- FEATURES -->
   <section>
-    <h2>What you get</h2>
-    <div class="grid">
-      <div class="card"><h3>Smart routing</h3><p>Each call goes to the cheapest model that meets your quality bar — simple tasks on DeepSeek/Kimi, hard ones on GPT/Claude only when required.</p></div>
-      <div class="card"><h3>Quality gates</h3><p>Automatic fallback to a flagship model on low-confidence or failing responses, so output quality never silently drops.</p></div>
-      <div class="card"><h3>Budget caps</h3><p>Per-key <code>max_budget</code> hard limits. No surprise spikes, no open-ended exposure.</p></div>
-      <div class="card"><h3>BYOK, multi-model</h3><p>Bring your own DeepSeek / Kimi / Qwen / OpenAI / Anthropic keys. Your provider bills you; we never touch your keys.</p></div>
+    <div class="sec-head">
+      <div class="eyebrow">What you get</div>
+      <h2>Engineered for the parts that usually break.</h2>
+    </div>
+    <div class="feat">
+      <div class="cell"><h3>Smart routing</h3><p>Each call goes to the cheapest model that meets your quality bar — simple tasks on DeepSeek/Kimi, hard ones on GPT/Claude only when required.</p></div>
+      <div class="cell"><h3>Quality gates</h3><p>Automatic fallback to a flagship model on low-confidence or failing responses, so output quality never silently drops.</p></div>
+      <div class="cell"><h3>Budget caps</h3><p>Per-key <code>max_budget</code> hard limits. No surprise spikes, no open-ended exposure.</p></div>
+      <div class="cell"><h3>BYOK, multi-model</h3><p>Bring your own DeepSeek / Kimi / Qwen / OpenAI / Anthropic keys. Your provider bills you; we never touch your keys.</p></div>
+    </div>
+  </section>
+
+  <!-- CALC -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Estimate</div>
+      <h2>What's your number?</h2>
+      <p class="sub2" style="color:var(--mut);font-size:.95rem">Use your own monthly token counts. Prices are public 2026-07 list rates (DeepSeek V4-Flash: $0.14/$0.28 per M; Kimi K2.6: $0.95/$4.00 per M; GPT-4o: $2.50/$10.00 per M).</p>
+    </div>
+    <div class="calc">
+      <div class="row">
+        <div class="fld">
+          <label>Currently using</label>
+          <select id="cur">
+            <option value="gpt-4o">GPT-4o</option>
+            <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
+            <option value="claude-opus-4.8">Claude Opus 4.8</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Prompt tokens / month (millions)</label>
+          <input id="pt" type="number" value="20" min="0" step="1">
+        </div>
+        <div class="fld">
+          <label>Completion tokens / month (millions)</label>
+          <input id="ct" type="number" value="5" min="0" step="1">
+        </div>
+      </div>
+      <div class="out">
+        <div class="obox">
+          <div class="lbl">Your bill now</div>
+          <div class="big" id="curCost">$0</div>
+          <div class="lbl" id="curName">—</div>
+        </div>
+        <div class="obox">
+          <div class="lbl">Routed to DeepSeek V4-Flash</div>
+          <div class="big save" id="dsCost">$0</div>
+          <div class="lbl" id="dsSave">save —</div>
+        </div>
+        <div class="obox">
+          <div class="lbl">Routed to Kimi K2.6 (balanced)</div>
+          <div class="big save" id="kimiCost">$0</div>
+          <div class="lbl" id="kimiSave">save —</div>
+        </div>
+        <div class="obox">
+          <div class="lbl">Annual saving (DeepSeek floor)</div>
+          <div class="big save" id="annual">$0</div>
+          <div class="lbl">vs your current plan</div>
+        </div>
+      </div>
+      <p class="note">Estimates from list prices; your real mix may differ. The open-source CLI does this from your actual logs — no guessing.</p>
     </div>
   </section>
 
   <!-- PRICING -->
   <section>
-    <h2>Pricing</h2>
+    <div class="sec-head">
+      <div class="eyebrow">Pricing</div>
+      <h2>Transparent, solo-operator rates.</h2>
+    </div>
     <div class="price">
       <div class="ptier">
-        <h3>Free audit (CLI)</h3>
+        <div class="tag">Free</div>
         <div class="pp">$0</div>
         <ul><li>Open-source, forever free</li><li>Run on your own logs</li><li>Generates ready config</li></ul>
+        <div class="foot">Validate your number first.</div>
       </div>
       <div class="ptier feat">
-        <h3>Routing setup</h3>
+        <div class="tag">Most popular</div>
         <div class="pp">$800 – 1,500</div>
-        <ul><li>One-time, 50% upfront</li><li>Gateway deployed & verified</li><li>Bring-your-own-keys</li><li>First month tuning included</li></ul>
+        <ul><li>One-time, 50% upfront</li><li>Gateway deployed &amp; verified</li><li>Bring-your-own-keys</li><li>First month tuning included</li></ul>
+        <div class="foot">Routing setup (S2).</div>
       </div>
       <div class="ptier">
-        <h3>Tuning retainer</h3>
+        <div class="tag">Retainer</div>
         <div class="pp">$200 – 900 / mo</div>
-        <ul><li>Monthly re-routing & tuning</li><li>Quality reports</li><li>Budget caps monitored</li><li>Cancel anytime</li></ul>
+        <ul><li>Monthly re-routing &amp; tuning</li><li>Quality reports</li><li>Budget caps monitored</li><li>Cancel anytime</li></ul>
+        <div class="foot">Tuning retainer (S3).</div>
       </div>
     </div>
-    <p class="note">Solo-operator rates for SMBs. Prices climb toward market rates as we collect case studies. Payment via PayPal (personal seller account) for early engagements.</p>
+    <p class="note" style="margin-top:18px">Solo-operator rates for SMBs. Prices climb toward market rates as we collect case studies. Payment via PayPal (personal seller account) for early engagements.</p>
   </section>
 
-  <!-- TRUST -->
-  <section class="trust">
-    <h2 style="font-size:20px">Your data stays yours</h2>
-    <div class="trow"><div class="ic">✓</div><div><p><b>Bring-your-own-keys.</b> We never see your provider API keys. Your provider bills you directly.</p></div></div>
-    <div class="trow"><div class="ic">✓</div><div><p><b>Prompts are not stored</b> after delivery. No training on your data, ever.</p></div></div>
-    <div class="trow"><div class="ic">✓</div><div><p><b>Open-source, auditable.</b> The gateway is LiteLLM (Apache-2.0). You can read every line we deploy.</p></div></div>
-    <div class="trow"><div class="ic">✓</div><div><p><b>Data residency is your choice.</b> Route to self-hosted open-weight models (DeepSeek/Qwen/Kimi) on infrastructure <i>you</i> control — nothing leaves your environment.</p></div></div>
-    <div class="warn"><b>Transparency note:</b> When routing to DeepSeek / Kimi / Qwen cloud APIs, your prompts are sent to those providers' servers (located in China). If data residency / GDPR matters to you, choose the self-hosted open-weight mode above, or keep sensitive traffic on a flagship Western model. We'll disclose this in writing before any engagement — no surprises.</div>
+  <!-- TRUST / POV -->
+  <section style="border-top:none;padding-bottom:0">
+    <div class="pov">
+      <div class="eyebrow">Our stance</div>
+      <p class="quote">We tell you exactly where your prompts go. Most providers won't.</p>
+      <p style="margin-bottom:6px">Routing to cheaper models means some traffic leaves your environment. We put the data path in writing before any work begins — no surprises, no fine print.</p>
+      <div class="trow"><div class="ic">✓</div><div><p><b>Bring-your-own-keys.</b> We never see your provider API keys. Your provider bills you directly.</p></div></div>
+      <div class="trow"><div class="ic">✓</div><div><p><b>Prompts aren't stored</b> after delivery. No training on your data, ever.</p></div></div>
+      <div class="trow"><div class="ic">✓</div><div><p><b>Open-source, auditable.</b> The gateway is LiteLLM (Apache-2.0). You can read every line we deploy.</p></div></div>
+      <div class="trow"><div class="ic">✓</div><div><p><b>Data residency is your choice.</b> Route to self-hosted open-weight models (DeepSeek/Qwen/Kimi) on infrastructure <i>you</i> control — nothing leaves your environment.</p></div></div>
+      <div class="small">Transparency note: when routing to DeepSeek / Kimi / Qwen cloud APIs, your prompts are sent to those providers' servers (located in China). If data residency or GDPR matters to you, choose the self-hosted open-weight mode, or keep sensitive traffic on a flagship Western model.</div>
+    </div>
   </section>
 
   <!-- FAQ -->
   <section>
-    <h2>FAQ</h2>
+    <div class="sec-head">
+      <div class="eyebrow">FAQ</div>
+      <h2>Questions, answered plainly.</h2>
+    </div>
     <details><summary>Why not just use OpenRouter / LiteLLM myself?</summary><p>You can — and many do. The paid service is for teams that lack the time to wire routing, tune quality gates, and monitor budgets monthly. The CLI is free precisely so you can validate the number first.</p></details>
     <details><summary>Do I have to change my application code?</summary><p>No. The gateway is OpenAI-compatible. You point <code>base_url</code> at it; the rest of your code is unchanged.</p></details>
-    <details><summary>Will quality drop?</summary><p>Not silently. Simple tasks move to cheaper models; hard tasks stay on a flagship via the quality gate + fallback. You set the quality bar.</p></details>
+    <details><summary>Will quality drop?</summary><p>Not silently. Simple tasks move to cheaper models; hard tasks stay on a flagship via the quality gate plus fallback. You set the quality bar.</p></details>
     <details><summary>Is this only for big spenders?</summary><p>No. Even $100–500/mo bills often hide 50%+ waste on tasks that don't need a flagship. The free CLI tells you your number in under a minute.</p></details>
     <details><summary>What if I'm worried about data going to China?</summary><p>Two options: (1) self-host open-weight models on your own infra, or (2) keep sensitive routes on Western flagship models. We document the data path per route before any work begins.</p></details>
   </section>
 
-  <!-- CONTACT FORM -->
-  <section class="contact" id="contact">
-    <h2>Book your free audit</h2>
-    <p class="mut">Tell us about your current AI spend. We'll reply within 2 business days with a rough saving estimate — no cost, no obligation.</p>
-    <form action="https://api.web3forms.com/submit" method="POST">
-      <input type="hidden" name="access_key" value="e2e23e2b-075c-495a-8ce7-f0ec2b6226ed">
-      <input type="hidden" name="from_name" value="ai-cost-audit landing">
-      <input type="hidden" name="redirect" value="https://ai.acan.ccwu.cc/#thanks">
-      <input type="hidden" name="subject" value="New AI cost audit inquiry — ai.acan.ccwu.cc">
-      <input type="checkbox" name="botcheck" style="display:none">
-      <div class="fld">
-        <label for="cname">Your name</label>
-        <input type="text" id="cname" name="name" required placeholder="Jane Doe">
-      </div>
-      <div class="fld">
-        <label for="cemail">Work email</label>
-        <input type="email" id="cemail" name="email" required placeholder="jane@company.com">
-      </div>
-      <div class="fld">
-        <label for="cmodel">Primary model you use now</label>
-        <select id="cmodel" name="current_model">
-          <option value="GPT-4o">GPT-4o</option>
-          <option value="GPT-5.6 Sol">GPT-5.6 Sol</option>
-          <option value="Claude Opus">Claude Opus</option>
-          <option value="Claude Sonnet">Claude Sonnet</option>
-          <option value="Mixed / unsure">Mixed / not sure</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="fld">
-        <label for="cspend">Approx. monthly AI API spend (USD)</label>
-        <input type="number" id="cspend" name="monthly_spend" min="0" step="50" placeholder="e.g. 2000">
-      </div>
-      <div class="fld">
-        <label for="cmsg">Anything we should know? (optional)</label>
-        <textarea id="cmsg" name="message" placeholder="Data residency constraints, volume, current stack..."></textarea>
-      </div>
-      <button type="submit" class="submit">Send inquiry →</button>
-    </form>
-    <p class="form-note">Prefer email? Write to <a class="link" href="mailto:hello@acan.ccwu.cc">hello@acan.ccwu.cc</a> · Form by Web3Forms</p>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact">
+      <h2>Book your free audit</h2>
+      <p class="sub2">Tell us about your current AI spend. We'll reply within 2 business days with a rough saving estimate — no cost, no obligation.</p>
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="e2e23e2b-075c-495a-8ce7-f0ec2b6226ed">
+        <input type="hidden" name="from_name" value="ai-cost-audit landing">
+        <input type="hidden" name="redirect" value="https://ai.acan.ccwu.cc/#contact">
+        <input type="hidden" name="subject" value="New AI cost audit inquiry — ai.acan.ccwu.cc">
+        <input type="checkbox" name="botcheck" style="display:none">
+        <div class="grid2">
+          <div class="fld">
+            <label for="cname">Your name</label>
+            <input type="text" id="cname" name="name" required placeholder="Jane Doe">
+          </div>
+          <div class="fld">
+            <label for="cemail">Work email</label>
+            <input type="email" id="cemail" name="email" required placeholder="jane@company.com">
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:16px">
+          <div class="fld">
+            <label for="cmodel">Primary model you use now</label>
+            <select id="cmodel" name="current_model">
+              <option value="GPT-4o">GPT-4o</option>
+              <option value="GPT-5.6 Sol">GPT-5.6 Sol</option>
+              <option value="Claude Opus">Claude Opus</option>
+              <option value="Claude Sonnet">Claude Sonnet</option>
+              <option value="Mixed / unsure">Mixed / not sure</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label for="cspend">Approx. monthly AI API spend (USD)</label>
+            <input type="number" id="cspend" name="monthly_spend" min="0" step="50" placeholder="e.g. 2000">
+          </div>
+        </div>
+        <div class="fld" style="margin-top:16px">
+          <label for="cmsg">Anything we should know? (optional)</label>
+          <textarea id="cmsg" name="message" placeholder="Data residency constraints, volume, current stack..."></textarea>
+        </div>
+        <button type="submit" class="submit">Send inquiry →</button>
+      </form>
+      <p class="form-note">Prefer email? Write to <a href="mailto:hello@acan.ccwu.cc">hello@acan.ccwu.cc</a> · Form by Web3Forms</p>
+    </div>
   </section>
 
-  <!-- FINAL CTA -->
-  <section class="final">
-    <h2>See your number first — it's free</h2>
-    <p class="mut">Run the open-source CLI on your own token counts, or book a 20-minute audit. No card, no obligation.</p>
-    <a class="btn" href="#contact">Book a free audit</a>
+  <!-- FINAL -->
+  <section class="final" style="border-top:none;padding-top:8px">
+    <div class="eyebrow">Start now</div>
+    <h2>See your number first — it's free.</h2>
+    <p class="lead">Run the open-source CLI on your own token counts, or book a 20-minute audit. No card, no obligation.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn" href="https://github.com/huocan007/ai-cost-audit" target="_blank" rel="noopener">Try the free CLI</a>
+      <a class="btn ghost" href="#contact">Book a free audit</a>
+    </div>
   </section>
 
   <footer>
     ai-cost-audit · Self-hosted LLM routing · GDPR-aware by design (BYOK · zero retention · open-weight self-host option).<br>
     © 2026 · Built by an independent operator. Gateway code: LiteLLM (Apache-2.0).
   </footer>
+
 </div>
 
 <script>
