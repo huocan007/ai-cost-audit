@@ -756,7 +756,7 @@
       <h2>Book your free audit</h2>
       <p class="sub2">Tell us about your current AI spend. We'll reply within 2 business days with a rough saving estimate — no cost, no obligation.</p>
       <p class="sub2" style="margin-top:.5rem">Prefer email? Write to <a href="mailto:contact@acan.ccwu.cc">contact@acan.ccwu.cc</a></p>
-      <form id="auditForm" action="https://formsubmit.co/huocan007@aliyun.com" method="POST">
+      <form id="auditForm" action="https://formsubmit.co/ajax/huocan007@aliyun.com" method="POST">
         <input type="hidden" name="_subject" value="New AI cost audit inquiry — ai.acan.ccwu.cc">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_replyto" value="">
@@ -859,17 +859,24 @@
     var orig = btn.textContent;
     form.addEventListener("submit", function(e){
       e.preventDefault();
-      // Set reply-to from user's email
-      var replyto = form.querySelector("input[name='_replyto']");
-      if(replyto) replyto.value = form.querySelector("#cemail").value || "";
-      var data = new FormData(form);
+      var data = {
+        name: form.querySelector("#cname")?.value || "",
+        email: form.querySelector("#cemail")?.value || "",
+        model: form.querySelector("#cmodel")?.value || "",
+        spend: form.querySelector("#cspend")?.value || "",
+        message: form.querySelector("#cmsg")?.value || "",
+        _replyto: form.querySelector("#cemail")?.value || "",
+        _subject: "New AI cost audit inquiry — ai.acan.ccwu.cc",
+        _captcha: false,
+        _template: "box"
+      };
       btn.disabled = true;
       btn.textContent = "Sending…";
       msg.style.display = "none";
-      fetch("https://formsubmit.co/huocan007@aliyun.com", {
+      fetch("https://formsubmit.co/ajax/huocan007@aliyun.com", {
         method: "POST",
-        body: data,
-        headers: { "Accept": "application/json" }
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data)
       }).then(function(r){
         if(!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
