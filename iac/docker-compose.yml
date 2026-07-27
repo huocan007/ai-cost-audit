@@ -1,0 +1,33 @@
+services:
+  litellm:
+    image: litellm/litellm:latest
+    container_name: costrouter-litellm
+    command: ["--config", "/app/litellm_config.yaml", "--port", "4000", "--host", "0.0.0.0"]
+    volumes:
+      - ./litellm_config.yaml:/app/litellm_config.yaml:ro
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks: [appnet]
+
+  caddy:
+    image: caddy:latest
+    container_name: costrouter-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../landing:/srv/landing:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    networks: [appnet]
+
+networks:
+  appnet:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

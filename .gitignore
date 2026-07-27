@@ -1,0 +1,24 @@
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Node (if any tooling added later)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local deploy artifacts
+*.log
+backup_output/
+.backup/
+.backup/

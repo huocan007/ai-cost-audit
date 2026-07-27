@@ -1,0 +1,4 @@
+# ai_cost_audit.py 本身仅用 Python 标准库，无需任何依赖。
+# 下方仅列出"部署网关"时需要的包（运行 iac/ 里的 LiteLLM 容器不需要在宿主机装）。
+litellm>=1.0
+ PyYAML>=6.0

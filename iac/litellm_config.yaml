@@ -1,0 +1,42 @@
+model_list:
+  # ============ A 经济档（中国算力 · 最省） ============
+  - model_name: deepseek-v4-flash
+    litellm_params:
+      model: deepseek/deepseek-v4-flash
+      api_base: https://api.deepseek.com/v1
+      api_key: os.environ/DEEPSEEK_API_KEY
+  - model_name: kimi-k2-5
+    litellm_params:
+      model: moonshot/kimi-k2-5        # 核验 model id: platform.moonshot.ai
+      api_base: https://api.moonshot.ai/v1
+      api_key: os.environ/MOONSHOT_API_KEY
+  # ============ B 标准档（中国算力 · 能力平衡） ============
+  - model_name: kimi-k2-6
+    litellm_params:
+      model: moonshot/kimi-k2-6
+      api_base: https://api.moonshot.ai/v1
+      api_key: os.environ/MOONSHOT_API_KEY
+  - model_name: qwen-72b
+    litellm_params:
+      model: qwen/qwen2.5-72b-instruct
+      api_base: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api_key: os.environ/QWEN_API_KEY
+  # ============ C 旗舰档（最难任务 · 含西方合规兜底） ============
+  - model_name: kimi-k3
+    litellm_params:
+      model: moonshot/kimi-k3          # 2026-07-16 发布;1M ctx;开源权重
+      api_base: https://api.moonshot.ai/v1
+      api_key: os.environ/MOONSHOT_API_KEY
+  - model_name: gpt-4o-fallback
+    litellm_params:
+      model: gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+router_settings:
+  routing_strategy: least-cost        # 默认走最便宜且达标的模型
+  fallback_strategy: "502,500,503,429"  # 失败自动回退
+  model_group_retry_policy:
+    num_retries: 2
+
+litellm_params:
+  context_window: 128000
