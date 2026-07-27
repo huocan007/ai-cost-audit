@@ -19,7 +19,7 @@ Most teams route **every** call to one flagship model. That's like using express
 No `pip` needed. It's a single file using only the Python standard library.
 
 ```bash
-git clone https://github.com/acan-ai/ai-cost-audit.git
+git clone https://github.com/huocan007/ai-cost-audit.git
 cd ai-cost-audit
 python ai_cost_audit.py --help
 ```
@@ -43,11 +43,11 @@ python ai_cost_audit.py gen-config --out litellm_config.yaml
 ```text
 $ python ai_cost_audit.py audit --prompt-tokens 50e6 --completion-tokens 20e6 --current gpt-4o
 
-  Current (gpt-4o):            $325.00 / mo
-  Routed (DeepSeek V4-Flash):  $12.60  / mo    save 96.1%
-  Routed (Kimi K2.6):          $127.50 / mo    save 60.8%
+  Current (gpt-4o):           $325.00 / mo
+  Routed (DeepSeek V4-Flash):   $12.60  / mo    save 96.1%
+  Routed (Kimi K2.6):         $127.50  / mo    save 60.8%
 
-  Annual saving: $3,749  ·  zero code change, swap one base_url
+  Annual saving: $3,749  ·  swap one base_url, zero code change
 ```
 
 Numbers use public 2026-07 list prices (see `PRICING` in the source). They're estimates — plug your own logs in for a ground-truth number.

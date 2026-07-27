@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ai-cost-audit 落地页 — 专业客户审查报告</title>
+<style>
+  :root{
+    --paper:#faf8f5; --paper-2:#f3efe8; --ink:#1b1a17; --ink-soft:#46433c;
+    --mut:#857f74; --line:#e6e0d6; --line-strong:#d6cebf; --accent:#15794e;
+    --red:#b4432f; --amber:#b4553f; --blue:#2f5a92;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 22px}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 0 80px}
+  h1{font-size:clamp(1.9rem,4vw,2.6rem);line-height:1.1;letter-spacing:-0.02em;margin-bottom:6px}
+  h2{font-size:1.45rem;margin:46px 0 14px;letter-spacing:-0.01em;border-bottom:2px solid var(--line-strong);padding-bottom:8px}
+  h3{font-size:1.08rem;margin:20px 0 6px}
+  p{color:var(--ink-soft);margin:8px 0}
+  .sub{color:var(--mut);font-size:.95rem}
+  .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+  .pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;font-size:.84rem;font-weight:600;border:1px solid var(--line-strong);background:#fff}
+  .pill.pass{color:var(--accent);border-color:var(--accent)}
+  .pill.fail{color:var(--red);border-color:var(--red)}
+  .pill.warn{color:var(--amber);border-color:var(--amber)}
+  .scorecard{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}
+  .sc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .sc .t{font-weight:700;font-size:.98rem;display:flex;justify-content:space-between;align-items:center}
+  .sc .s{font-size:.78rem;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:8px}
+  .s.pass{background:var(--accent);color:#fff}.s.fail{background:var(--red);color:#fff}.s.warn{background:#e8c9a0;color:#5a3d1f}
+  .sc .d{font-size:.86rem;color:var(--mut);margin-top:6px}
+  .finding{border:1px solid var(--line);border-radius:13px;padding:18px 20px;margin:14px 0;background:#fff}
+  .finding.crit{border-left:5px solid var(--red)}
+  .finding.maj{border-left:5px solid var(--amber)}
+  .finding.min{border-left:5px solid var(--blue)}
+  .finding .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .finding .sev{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+  .sev.crit{background:var(--red);color:#fff}.sev.maj{background:var(--amber);color:#fff}.sev.min{background:#dfe7f5;color:var(--blue)}
+  .finding .ttl{font-weight:700;font-size:1.05rem}
+  .finding .ref{font-size:.78rem;color:var(--mut);font-family:ui-monospace,Menlo,Consolas,monospace}
+  .finding code{background:var(--paper-2);padding:1px 6px;border-radius:5px;font-size:.86em;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .finding ul{margin:8px 0 0 20px;color:var(--ink-soft);font-size:.93rem}
+  .finding ul li{margin:5px 0}
+  .fix{background:var(--paper-2);border-radius:9px;padding:11px 14px;margin-top:10px;font-size:.9rem}
+  .fix b{color:var(--accent)}
+  .good{background:#eef6f0;border:1px solid #cfe6d6;border-radius:13px;padding:18px 20px;margin:14px 0}
+  .good h3{color:var(--accent);margin-top:0}
+  .good ul{margin:6px 0 0 20px}.good li{margin:5px 0;color:var(--ink-soft)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+  td .ref{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;color:var(--mut)}
+  .foot{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--mut);font-size:.85rem}
+  @media(max-width:680px){.scorecard{grid-template-columns:1fr}.wrap{padding:24px 0 60px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Professional Client Review</div>
+  <h1>ai-cost-audit 落地页审查报告</h1>
+  <p class="sub">以"谨慎的西方企业客户"视角逐元素核验。审查日期 2026-07-27。逐条给出严重度、证据与修复建议。</p>
+
+  <div class="badge-row">
+    <span class="pill pass">✓ 价格/模型数据 已核实真实</span>
+    <span class="pill pass">✓ 页面内数字 自洽</span>
+    <span class="pill fail">✕ "免费 CLI"承诺 与仓库不符</span>
+    <span class="pill warn">! 专业度/转化 有提升空间</span>
+  </div>
+
+  <div class="scorecard">
+    <div class="sc"><div class="t">事实准确性（价格/模型）<span class="s pass">PASS</span></div><div class="d">DeepSeek V4-Flash $0.14/$0.28、Kimi K2.6 $0.95/$4.00、GPT-4o $2.50/$10、Claude 3.5 Sonnet $3/$15、Claude Opus $15/$75 — 全部与 2026-07 真实公开报价一致（已联网核实）。</div></div>
+    <div class="sc"><div class="t">页面内数字自洽<span class="s pass">PASS</span></div><div class="d">50M/20M 样例：GPT-4o $325、DeepSeek $12.60、Kimi $127.50，计算器与终端、Before/After 完全吻合。</div></div>
+    <div class="sc"><div class="t">"免费 CLI"承诺 vs 仓库<span class="s fail">FAIL</span></div><div class="d">Hero 终端演示的命令在实际仓库里不存在；README 克隆地址是死链。客户一点 "Try the free CLI" 就会踩坑。</div></div>
+    <div class="sc"><div class="t">专业度 / 转化<span class="s warn">WARN</span></div><div class="d">标题含裸域名、缺 favicon/OG 标签、"PayPal 个人账户"措辞、表单无成功态。</div></div>
+    <div class="sc"><div class="t">数据合规 / 信任<span class="s pass">PASS</span></div><div class="d">数据驻留与 GDPR 章节诚实、前置、专业，是页面最强资产。</div></div>
+    <div class="sc"><div class="t">视觉 / 响应式<span class="s warn">WARN</span></div><div class="d">两处 SVG 图例/连线有轻微裁切与间隙；其余响应式良好。</div></div>
+  </div>
+
+  <div class="good">
+    <h3>客户会认可的优点（保留）</h3>
+    <ul>
+      <li><b>核心报价真实可核。</b> 没有编造模型或价格——这是你最担心的点，已确认干净。</li>
+      <li><b>数据驻留/合规章节专业且诚实。</b> BYOK、提示词不存储、GDPR 路径选择、明确标注"中国服务器"，直接化解西方客户最大顾虑。是页面最强信任资产，应保留并前置强化。</li>
+      <li><b>设计克制、对比度高、移动端适配好。</b> 编辑派暖白 + Inter，阅读舒适；表格有横向滚动兜底。</li>
+      <li><b>定价透明、免费 CLI 作引流钩子。</b> 三档结构清晰，免费层降低决策门槛。</li>
+      <li><b>FAQ 直白。</b> 对"数据去中国""EU/GDPR""质量是否下降"等问题回答诚实，不回避。</li>
+    </ul>
+  </div>
+
+  <h2>必须修复（准确性 / 信任）</h2>
+
+  <div class="finding crit">
+    <div class="hd"><span class="sev crit">Critical</span><span class="ttl">Hero 终端演示的命令在真实仓库里不存在</span></div>
+    <div class="ref">index.html 行 295–307 ｜ 仓库 tool/ai_cost_audit.py 行 14–16、134–155</div>
+    <p>Hero 终端展示：</p>
+    <ul>
+      <li><code>pip install ai-cost-audit</code> — 实际仓库 README 明确写"无需 pip，单文件标准库"，且无 PyPI 包。客户执行会失败。</li>
+      <li><code>ai-cost-audit --logs july.jsonl</code> — 真实 CLI 是 <code>python ai_cost_audit.py audit --prompt-tokens 50e6 --completion-tokens 20e6 --current gpt-4o</code>，既无 <code>--logs</code> 也无"读日志"功能（它吃 token 计数，不是日志文件）。</li>
+      <li>终端里的英文输出格式，与实际代码打印的中文"AI 成本审计结果"也不一致。</li>
+    </ul>
+    <p><b>为什么严重：</b> 这正是你卖的信任——"免费、可验证、不编数字"。客户点 "Try the free CLI" 后按 Hero 照做却报错，第一印象直接崩。</p>
+    <div class="fix"><b>修复方向：</b> 让 Hero 终端、README、真实代码三者一致。最小改动：把 Hero 命令改成真实命令 <code>python ai_cost_audit.py audit --prompt-tokens 50e6 --completion-tokens 20e6 --current gpt-4o</code>，并把输出改成工具真实打印的内容（或先让工具输出英文）。更彻底：把工具做成真正的 <code>pip install ai-cost-audit</code> 并补 PyPI 发布/或把 README 改成 <code>git clone</code> 且 Hero 同步。</div>
+  </div>
+
+  <div class="finding crit">
+    <div class="hd"><span class="sev crit">Critical</span><span class="ttl">README 克隆地址是死链（org 写错）</span></div>
+    <div class="ref">仓库 README.md（WebFetch 已确认）｜ 落地页 GitHub 链接为 huocan007/ai-cost-audit（正确）</div>
+    <p>README 写：<code>git clone https://github.com/acan-ai/ai-cost-audit.git</code>，但真实仓库是 <code>huocan007/ai-cost-audit</code>。<code>acan-ai</code> 这个 org 不存在，客户复制即 404。</p>
+    <div class="fix"><b>修复：</b> 全局把 README/任意文档里的 <code>acan-ai</code> 改为 <code>huocan007</code>。落地页本身的 GitHub 链接（行 281、290、781）是正确的，无需改。</div>
+  </div>
+
+  <div class="finding maj">
+    <div class="hd"><span class="sev maj">Major</span><span class="ttl">README 示例输出与实际代码输出不符</span></div>
+    <div class="ref">仓库 README.md 示例（英文 $325 / save 96.1%）｜ tool/ai_cost_audit.py 行 56–67（中文"AI 成本审计结果"格式）</div>
+    <p>README 贴的示例输出是英文、格式整齐；实际 <code>cmd_audit</code> 打印的是中文标题 + 不同排版。客户照 README 跑出来对不上，像文案与实际脱节。</p>
+    <div class="fix"><b>修复：</b> 让工具输出英文并统一格式，或重新从真实运行结果生成 README 示例。顺带建议工具输出语言改为英文（落地页与仓库都面向西方客户）。</div>
+  </div>
+
+  <div class="finding maj">
+    <div class="hd"><span class="sev maj">Major</span><span class="ttl">工具内嵌价格含未核实/虚构模型</span></div>
+    <div class="ref">tool/ai_cost_audit.py 行 32–33：gpt-5.6-sol $5/$30、claude-opus-4.8 $5/$25</div>
+    <p>CLI 的 PRICING 字典里混入了未在公开页核实的模型（代码注释自己也标"推测"）。落地页计算器用的是另一套真实价格（$15/$75 = 真实 Claude 3 Opus），所以页面本身没骗人；但若客户跑 CLI 的 <code>gen-config</code> 或看工具源码，会看到这些虚构项，削弱"我们只用核实价"的承诺。仓库 <code>kimi-k3</code> 也标注"未核到精确数"。</div>
+    <div class="fix"><b>修复：</b> 工具只保留已核实模型；未核实的（gpt-5.6、claude-opus-4.8、kimi-k3）要么删除，要么加醒目"估算、成交前须核最新价"警告并排除出默认路由。</div>
+  </div>
+
+  <h2>专业度 / 转化提升</h2>
+
+  <div class="finding maj">
+    <div class="hd"><span class="sev maj">Major</span><span class="ttl">&lt;title&gt; 含裸域名，显得业余</span></div>
+    <div class="ref">index.html 行 6</div>
+    <p><code>&lt;title&gt;Cut 70–90% off your LLM bill — ai.acan.ccwu.cc&lt;/title&gt;</code> 把域名写进标题，像占位未改。专业站标题应是品牌+价值主张。</p>
+    <div class="fix"><b>改为：</b> <code>AI Cost Audit — Cut 70–90% off your LLM bill</code></div>
+  </div>
+
+  <div class="finding maj">
+    <div class="hd"><span class="sev maj">Major</span><span class="ttl">"PayPal（个人账户）"措辞削弱信任</span></div>
+    <div class="ref">index.html 行 693</div>
+    <p>"Payment via PayPal (personal seller account) for early engagements." 对西方企业客户，"personal seller account" 信号是"个人非正式、可能触发 PayPal 资金冻结/无企业买家保护"。</p>
+    <div class="fix"><b>改为：</b> "Payment via PayPal or bank transfer." 并建议注册 PayPal Business 账户；如暂用个人户，页面不要主动暴露"personal"。</div>
+  </div>
+
+  <div class="finding maj">
+    <div class="hd"><span class="sev maj">Major</span><span class="ttl">联系表单无明确成功态</span></div>
+    <div class="ref">index.html 行 732–771</div>
+    <p>提交后仅按 <code>redirect</code> 跳回 <code>#contact</code>，无"已收到，2 个工作日内回复"的内联提示，整页刷新体验生硬，且客户不确定是否发送成功。</p>
+    <div class="fix"><b>修复：</b> 加一小段 JS：拦截提交→显示"Thanks — we'll reply within 2 business days"内联成功块，避免硬刷新。Web3Forms 支持 AJAX 返回。</div>
+  </div>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">缺 favicon 与 Open Graph / Twitter 卡片</span></div>
+    <div class="ref">index.html &lt;head&gt; 行 4–10</div>
+    <p>无 <code>favicon</code>、无 <code>og:title/description/image</code>。在 LinkedIn / X 分享时链接预览丑（灰块+裸 URL），而社媒分享正是获客主渠道。</p>
+    <div class="fix"><b>修复：</b> 加 <code>&lt;link rel="icon"&gt;</code>（可用现有徽标 SVG 转 ico）与一套 OG 标签（含一张 1200×630 的预览图，建议用架构图或 Before/After 截图）。</div>
+  </div>
+
+  <h2>视觉 / 细节打磨</h2>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">数据驻留 SVG 图例底部被轻微裁切</span></div>
+    <div class="ref">index.html 行 451（transform translate(40,395)，viewBox 0 0 800 400）</div>
+    <p>图例文字基线约 y=399，恰好在 viewBox 底边，文字下缘会超出被切。目标节点底边在 y=380，图例离得太近。</p>
+    <div class="fix"><b>修复：</b> viewBox 高度改为 <code>0 0 800 415</code>，图例 y 平移到 <code>400</code>，留出呼吸空间。</div>
+  </div>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">架构图连线与目标节点有 5–6px 间隙</span></div>
+    <div class="ref">index.html 行 532（App→网关止于 x249，网关起于 255）｜ 行 533–536（模型连线止于 x580，节点起于 585）</div>
+    <p>连线箭头停在节点边缘前 5–6px，视觉上"没接上"。</p>
+    <div class="fix"><b>修复：</b> App→网关 <code>L249 200</code> 改为 <code>L254 200</code>；三条模型连线终点 <code>580</code> 改为 <code>584</code>。建议本地起服务渲染后肉眼复核贝塞尔曲线是否交叉。</div>
+  </div>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">"1 line of code" 对纯免费层略乐观</span></div>
+    <div class="ref">index.html 行 345</div>
+    <p>"1 line of code to integrate (change base_url)"——前提是网关已部署。免费层用户需先 <code>docker compose up</code> 才有网关可指。诚实微调即可。</p>
+    <div class="fix"><b>改为：</b> "1 line to integrate — after we deploy the gateway" 或 "(change base_url once the gateway is live)"。</div>
+  </div>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">计算器缺 GPT-4.1，但联系表单提供它</span></div>
+    <div class="ref">index.html 行 626–630（计算器下拉）vs 行 752–757（联系表单含 GPT-4.1）</div>
+    <p>用 GPT-4.1 的客户在计算器里选不到自己，略显脱节。</p>
+    <div class="fix"><b>修复：</b> 计算器下拉补 <code>GPT-4.1</code>（定价按公开价补入 JS 的 P 字典），或联系表单去掉 GPT-4.1。</div>
+  </div>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">"Claude Opus 4" 命名待核实 + 连字符不统一</span></div>
+    <div class="ref">index.html 行 287（GPT‑4o 用不换行连字符）vs 行 297 等（GPT-4o 普通连字符）｜ 行 797（Claude Opus 4 $15/$75）</div>
+    <p>$15/$75 对应真实 Claude 3 Opus；2026 是否已有 "Claude Opus 4" 命名需确认（搜索结果出现 "Claude Opus 4.6"，故 "Opus 4"  plausibly 存在）。另外 Hero 标题用 <code>&#8209;</code> 不换行连字符，正文用普通 <code>-</code>，建议统一。</p>
+    <div class="fix"><b>修复：</b> 确认 2026 准确 Anthropic 模型名；全站连字符风格统一。</div>
+  </div>
+
+  <div class="finding min">
+    <div class="hd"><span class="sev min">Minor</span><span class="ttl">价值主张与数据顾虑的张力可前置化解</span></div>
+    <div class="ref">全局（Hero 行 287–293 vs 数据驻留章节 行 348–479）</div>
+    <p>Hero 主承诺"省 70–90%"主要靠中国路线模型实现，而这恰是客户最大顾虑。合规章节已诚实化解，但仅在页面中段。可在 Hero 副文案加一句 "with data-residency controls you choose"，把异议前置，不必等滚到中段。</p>
+    <div class="fix"><b>建议：</b> Hero lead 末尾补半句数据驻留控制的承诺，与中段章节呼应。</div>
+  </div>
+
+  <h2>核验结论与建议优先级</h2>
+  <table>
+    <tr><th>优先级</th><th>项</th><th>影响</th></tr>
+    <tr><td><b>P0 立即</b></td><td>Hero 终端命令造假、README 死链克隆地址</td><td><span class="ref">直接破坏"免费 CLI"承诺，客户一点就踩坑</span></td></tr>
+    <tr><td><b>P0 立即</b></td><td>工具内嵌虚构模型价格（gpt-5.6 / claude-opus-4.8 / kimi-k3）</td><td><span class="ref">与"只用核实价"承诺冲突，专业客户看源码会识破</span></td></tr>
+    <tr><td><b>P1 上线前</b></td><td>标题裸域名、PayPal 个人账户措辞、表单成功态、favicon/OG</td><td><span class="ref">专业第一印象与社媒获客转化</span></td></tr>
+    <tr><td><b>P2 打磨</b></td><td>SVG 图例裁切/连线间隙、1-line 措辞、GPT-4.1、命名统一</td><td><span class="ref">细节精致度</span></td></tr>
+  </table>
+
+  <div class="foot">
+    审查方法：逐元素通读 index.html 源码 + 联网核实 5 个模型 2026 公开报价 + WebFetch 核验 GitHub 仓库 README 与代码结构 + 通读 tool/ai_cost_audit.py 实际接口。<br>
+    未改动任何文件。以上为审查报告，待确认后我再逐条落地修复。
+  </div>
+
+</div>
+</body>
+</html>

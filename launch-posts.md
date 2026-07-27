@@ -38,7 +38,7 @@ Honest limits:
 - Not a silver bullet: some tasks genuinely need a flagship. The point is to
   stop paying flagship prices for tasks that don't.
 
-GitHub: https://github.com/acan-ai/ai-cost-audit
+GitHub: https://github.com/huocan007/ai-cost-audit
 Happy to answer questions / take routing-heuristic feedback.
 ```
 
@@ -104,7 +104,7 @@ Two honesty notes I'd want if I were reading this:
    overrides.
 
 Methodology sources: RouteLLM (UC Berkeley + Canva), FrugalGPT, LiteLLM registry.
-GitHub: https://github.com/acan-ai/ai-cost-audit
+GitHub: https://github.com/huocan007/ai-cost-audit
 Feedback on the routing heuristics welcome — especially where this breaks.
 ```
 
