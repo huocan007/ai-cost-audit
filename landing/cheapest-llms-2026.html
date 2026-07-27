@@ -119,11 +119,22 @@
   .btn{display:inline-block;background:var(--accent);color:#fff;font-weight:600;font-size:1rem;padding:13px 26px;border-radius:9px;text-decoration:none;transition:background .15s ease}
   .btn:hover{background:#0f5e3c;text-decoration:none}
 
+  /* HERO CTA (above the fold) */
+  .hero-cta{margin:32px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+  .hero-cta .btn{font-size:1.06rem;padding:15px 32px}
+  .micro{font-size:.82rem;color:var(--mut);margin:0;line-height:1.5}
+  .micro b{color:var(--accent)}
+
+  /* STICKY MOBILE CTA (long-form follow bar) */
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);padding:12px 18px;display:none;z-index:50}
+  .sticky-cta .btn{display:block;width:100%;text-align:center;font-size:1.05rem;padding:14px 20px}
+
   footer{margin-top:60px;border-top:1px solid var(--line);padding-top:26px;color:var(--mut);font-size:.85rem;line-height:1.7}
   footer a{color:var(--mut)}
 
   @media (max-width:680px){
-    body{padding:0 18px;font-size:16px}
+    body{padding:0 18px 84px;font-size:16px}
+    .sticky-cta{display:block}
     nav{margin-bottom:38px;padding:20px 0}
     .metrics{grid-template-columns:1fr}
     .metrics .m{border-right:none;border-bottom:1px solid var(--line)}
@@ -156,6 +167,11 @@
     <div class="m"><div class="num">89&times;</div><div class="lab">cheaper output vs Claude Opus 4.8 ($0.28 vs $25 / 1M)</div></div>
     <div class="m"><div class="num">$0.28</div><div class="lab">DeepSeek V4 Flash cost per 1M output tokens</div></div>
     <div class="m"><div class="num">60&ndash;80%</div><div class="lab">average token-price drop since early 2025 (AI Pricing Guru)</div></div>
+  </div>
+
+  <div class="hero-cta">
+    <a class="btn" href="https://ai.acan.ccwu.cc/#contact">Get My Free AI Cost Audit &rarr;</a>
+    <p class="micro"><b>Free.</b> No signup required &middot; Response within 24h.</p>
   </div>
 </header>
 
@@ -323,14 +339,19 @@
 
 <div class="final">
   <h2>Want this computed for your own traffic?</h2>
-  <p class="sub2">Run a free audit on your real API logs, or get a gateway configured for you.</p>
-  <a class="btn" href="https://ai.acan.ccwu.cc/">Run the AI Cost Audit &rarr;</a>
+  <p class="sub2">Get a free audit on your real API logs, or have a cost-routing gateway configured for you.</p>
+  <a class="btn" href="https://ai.acan.ccwu.cc/#contact">Get My Free AI Cost Audit &rarr;</a>
+  <p class="micro" style="margin-top:14px"><b>Free.</b> No signup required &middot; Response within 24h.</p>
 </div>
 
 <footer>
   <p>Verified 2026-07-27 against official provider pricing pages. Prices change constantly &mdash; links above point to live sources. Part of the <a href="https://ai.acan.ccwu.cc/">AI Cost Audit</a> project.</p>
   <p>Methodology: ranking by output price (output tokens cost 3&ndash;5&times; input). Sources: DeepSeek, Google, Moonshot, Anthropic, OpenAI official pricing pages; Citi via Securities Times; CloudMart; Tokencost.</p>
 </footer>
+
+<div class="sticky-cta">
+  <a class="btn" href="https://ai.acan.ccwu.cc/#contact">Get My Free AI Cost Audit &rarr;</a>
+</div>
 
 </div>
 
