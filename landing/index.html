@@ -258,10 +258,10 @@
 <span class="pr">$</span> ai-cost-audit --logs july.jsonl<br>
 <br>
 <span class="dim">  Model used today</span>&nbsp;&nbsp;&nbsp;&nbsp;GPT-4o<br>
-<span class="dim">  Current spend</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="red">$2,140 / month</span><br>
+<span class="dim">  Current spend</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="red">$325 / month</span><br>
 <span class="bar">  ────────────────────────────────</span><br>
-<span class="dim">  Routed → DeepSeek</span>&nbsp;&nbsp;&nbsp;<span class="grn">$86 / month</span><br>
-<span class="dim">  Routed → Kimi K2.6</span>&nbsp;&nbsp;&nbsp;<span class="grn">$252 / month</span><br>
+<span class="dim">  Routed → DeepSeek</span>&nbsp;&nbsp;&nbsp;<span class="grn">$12.60 / month</span><br>
+<span class="dim">  Routed → Kimi K2.6</span>&nbsp;&nbsp;&nbsp;<span class="grn">$127.50 / month</span><br>
 <span class="bar">  ────────────────────────────────</span><br>
 <span class="dim">  Potential saving</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="grn">up to 96%</span><br>
 <span class="dim">  Recommended</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S2 · routing setup
@@ -364,7 +364,7 @@
         <path class="conn" d="M445 248 C515 280, 520 312, 580 311" marker-end="url(#arw)" stroke-dasharray="5 4"/>
 
         <!-- Output label -->
-        <text class="t-lbl" x="510" y="100" text-anchor="middle" transform="rotate(-18 510 100)">by difficulty</text>
+        <text class="t-lbl" x="475" y="92" text-anchor="middle">route by task</text>
       </svg>
     </div>
   </section>
@@ -378,13 +378,13 @@
     <div class="ba">
       <div class="panel before">
         <div class="tag">Before · as-is</div>
-        <div class="amt">$2,140<span style="font-size:1rem;font-weight:600"> /mo</span></div>
+        <div class="amt">$325<span style="font-size:1rem;font-weight:600"> /mo</span></div>
         <div class="desc">Everything on GPT-4o — including the 80% of calls that never needed a flagship model.</div>
       </div>
       <div class="arrow">→</div>
       <div class="panel after">
         <div class="tag">After · routed</div>
-        <div class="amt">$86<span style="font-size:1rem;font-weight:600"> /mo</span></div>
+        <div class="amt">$12.60<span style="font-size:1rem;font-weight:600"> /mo</span></div>
         <div class="desc">Routine calls move to DeepSeek; GPT-4o stays only for the tasks that require it.</div>
         <span class="savebadge">96% lower</span>
       </div>
@@ -445,7 +445,7 @@
     <div class="sec-head">
       <div class="eyebrow">Estimate</div>
       <h2>What's your number?</h2>
-      <p class="sub2" style="color:var(--mut);font-size:.95rem">Use your own monthly token counts. Prices are public 2026-07 list rates (DeepSeek V4-Flash: $0.14/$0.28 per M; Kimi K2.6: $0.95/$4.00 per M; GPT-4o: $2.50/$10.00 per M).</p>
+      <p class="sub2" style="color:var(--mut);font-size:.95rem">Use your own monthly token counts. Prices are public list rates at time of writing (DeepSeek V4-Flash: $0.14/$0.28 per M; Kimi K2.6: $0.95/$4.00 per M; GPT-4o: $2.50/$10.00 per M; Claude 3.5 Sonnet: $3/$15; Claude Opus 4: $15/$75 per M). Verify current rates before any engagement.</p>
     </div>
     <div class="calc">
       <div class="row">
@@ -453,8 +453,8 @@
           <label>Currently using</label>
           <select id="cur">
             <option value="gpt-4o">GPT-4o</option>
-            <option value="gpt-5.6-sol">GPT-5.6 Sol</option>
-            <option value="claude-opus-4.8">Claude Opus 4.8</option>
+            <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+            <option value="claude-opus-4">Claude Opus 4</option>
           </select>
         </div>
         <div class="fld">
@@ -534,7 +534,7 @@
           <rect class="rd-box" x="20" y="70" width="200" height="110" rx="12"/>
           <text class="rd-t" x="120" y="108" text-anchor="middle">Your environment</text>
           <text class="rd-ts" x="120" y="128" text-anchor="middle">prompts originate here</text>
-          <text class="rd-ts" x="120" y="148" text-anchor="middle">🔒 keys never leave</text>
+          <text class="rd-ts" x="120" y="148" text-anchor="middle">keys never leave</text>
 
           <!-- Cloud route (dashed) -->
           <path class="rd-line" d="M220 110 C330 90, 360 60, 470 55"/>
@@ -548,7 +548,7 @@
           <rect class="rd-box-acc" x="430" y="170" width="310" height="78" rx="11"/>
           <text class="rd-t" x="585" y="200" text-anchor="middle">Self-hosted open-weight</text>
           <text class="rd-ts" x="585" y="220" text-anchor="middle">your infra · zero egress</text>
-          <text class="rd-ts" x="585" y="238" text-anchor="middle">🔒 nothing leaves your environment</text>
+          <text class="rd-ts" x="585" y="238" text-anchor="middle">nothing leaves your environment</text>
 
           <!-- legend -->
           <text class="rd-ts" x="20" y="235" style="font:500 11px Inter,sans-serif;fill:#857f74">— ┄ cloud route (cheap, data leaves) · —— self-host route (your control)</text>
@@ -602,9 +602,9 @@
             <label for="cmodel">Primary model you use now</label>
             <select id="cmodel" name="current_model">
               <option value="GPT-4o">GPT-4o</option>
-              <option value="GPT-5.6 Sol">GPT-5.6 Sol</option>
-              <option value="Claude Opus">Claude Opus</option>
-              <option value="Claude Sonnet">Claude Sonnet</option>
+              <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
+              <option value="Claude Opus 4">Claude Opus 4</option>
+              <option value="GPT-4.1">GPT-4.1</option>
               <option value="Mixed / unsure">Mixed / not sure</option>
               <option value="Other">Other</option>
             </select>
@@ -620,7 +620,7 @@
         </div>
         <button type="submit" class="submit">Send inquiry →</button>
       </form>
-      <p class="form-note">Prefer email? Write to <a href="mailto:hello@acan.ccwu.cc">hello@acan.ccwu.cc</a> · Form by Web3Forms</p>
+      <p class="form-note">Form by Web3Forms · we reply within 2 business days.</p>
     </div>
   </section>
 
@@ -645,8 +645,8 @@
 <script>
   const P = {
     "gpt-4o":         {in:2.50, out:10.00, label:"GPT-4o"},
-    "gpt-5.6-sol":    {in:5.00, out:30.00, label:"GPT-5.6 Sol"},
-    "claude-opus-4.8":{in:5.00, out:25.00, label:"Claude Opus 4.8"},
+    "claude-3.5-sonnet":{in:3.00, out:15.00, label:"Claude 3.5 Sonnet"},
+    "claude-opus-4":  {in:15.00, out:75.00, label:"Claude Opus 4"},
     "deepseek-v4-flash":{in:0.14, out:0.28, label:"DeepSeek V4-Flash"},
     "kimi-k2-6":      {in:0.95, out:4.00, label:"Kimi K2.6"}
   };
