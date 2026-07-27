@@ -7,7 +7,7 @@
 <meta name="description" content="Audit your AI API traffic and route each task to the cheapest model that still works. Same prompts, same quality, a fraction of the cost. Open-source CLI + paid setup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#faf8f5;
@@ -24,6 +24,8 @@
     --term-dim:#9a9486;
     --term-red:#f0a6a0;
     --term-grn:#8fd6ad;
+    --warn-bg:#fbeee9;
+    --warn-line:#f0c9bd;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -37,19 +39,19 @@
   }
   .wrap{max-width:860px;margin:0 auto;padding:0 0 80px}
   .wide{max-width:1080px;margin:0 auto;padding:0}
-  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;letter-spacing:-0.01em;color:var(--ink)}
+  h1,h2,h3{font-family:"Inter",sans-serif;font-weight:700;letter-spacing:-0.02em;color:var(--ink)}
   h1{font-size:clamp(2.3rem,5.4vw,3.6rem);line-height:1.06;margin-bottom:22px}
   h2{font-size:clamp(1.6rem,3vw,2.1rem);line-height:1.15;margin-bottom:14px}
   h3{font-size:1.18rem;margin-bottom:6px}
   p{color:var(--ink-soft)}
   a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
-  .eyebrow{font-family:"Inter",sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
   .lead{font-size:1.18rem;color:var(--ink-soft);max-width:38rem;margin-bottom:30px}
 
   /* NAV */
   nav{display:flex;justify-content:space-between;align-items:center;padding:26px 0;border-bottom:1px solid var(--line);margin-bottom:64px}
-  .logo{font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;letter-spacing:-0.01em;display:flex;align-items:center;gap:9px}
+  .logo{font-weight:700;font-size:1.05rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:9px}
   .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
   nav .gh{font-size:.92rem;color:var(--mut);font-weight:500}
   nav .gh:hover{color:var(--accent);text-decoration:none}
@@ -70,33 +72,74 @@
   .term .pr{color:#c9c2b2}
   .term .bar{color:var(--term-dim)}
 
+  /* MODEL BADGES */
+  .badges-wrap{margin:46px 0 0}
+  .badges-cap{font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:14px}
+  .badges{display:flex;flex-wrap:wrap;gap:11px}
+  .badge{display:inline-flex;align-items:center;gap:9px;padding:9px 16px;border:1px solid var(--line-strong);border-radius:999px;background:#fff;font-weight:600;font-size:.92rem;color:var(--ink)}
+  .badge svg{width:18px;height:18px;flex:none}
+  .badge .sub{font-weight:400;color:var(--mut);font-size:.82rem}
+
   /* METRICS */
   .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:72px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .metrics .m{padding:30px 24px;border-right:1px solid var(--line)}
   .metrics .m:last-child{border-right:none}
-  .metrics .num{font-family:"Fraunces",serif;font-size:2.1rem;font-weight:500;color:var(--ink);line-height:1}
+  .metrics .num{font-weight:800;font-size:2rem;color:var(--ink);line-height:1.1}
   .metrics .lab{font-size:.9rem;color:var(--mut);margin-top:8px}
 
   /* SECTION */
   section{padding:64px 0;border-top:1px solid var(--line)}
   section:first-of-type{border-top:none}
-  .sec-head{margin-bottom:34px;max-width:40rem}
+  .sec-head{margin-bottom:34px;max-width:44rem}
+  h2{overflow-wrap:break-word;word-break:break-word}
   .sec-head .eyebrow{margin-bottom:12px}
+
+  /* ARCHITECTURE DIAGRAM */
+  .diagram{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px}
+  .diagram svg{width:100%;height:auto;display:block}
+  .node{fill:#fff;stroke:var(--line-strong);stroke-width:1.5}
+  .node-gw{fill:var(--accent-weak);stroke:var(--accent);stroke-width:1.5}
+  .node-fb{fill:#fff;stroke:var(--mut);stroke-width:1.5;stroke-dasharray:5 4}
+  .conn{stroke:var(--line-strong);stroke-width:1.5;fill:none}
+  .conn-ac{stroke:var(--accent);stroke-width:1.5;fill:none}
+  .t-title{font:600 14px Inter,sans-serif;fill:var(--ink)}
+  .t-sub{font:400 11.5px Inter,sans-serif;fill:var(--mut)}
+  .t-acc{font:700 14px Inter,sans-serif;fill:var(--accent)}
+  .t-fb{font:600 13px Inter,sans-serif;fill:var(--mut)}
+  .t-lbl{font:500 11px Inter,sans-serif;fill:var(--mut)}
+
+  /* BEFORE / AFTER */
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-top:6px}
+  .ba .panel{padding:26px 24px;border-radius:14px;display:flex;flex-direction:column;justify-content:center}
+  .ba .before{background:var(--warn-bg);border:1px solid var(--warn-line)}
+  .ba .after{background:var(--accent-weak);border:1px solid var(--accent)}
+  .ba .tag{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+  .ba .before .tag{color:#b4553f}
+  .ba .after .tag{color:var(--accent)}
+  .ba .amt{font-weight:800;font-size:2.1rem;line-height:1.05}
+  .ba .before .amt{color:#b4553f}
+  .ba .after .amt{color:var(--accent)}
+  .ba .desc{font-size:.9rem;color:var(--mut);margin-top:6px}
+  .ba .arrow{display:flex;align-items:center;justify-content:center;padding:0 18px;font-size:2rem;color:var(--mut);font-weight:300}
+  .ba .savebadge{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;font-weight:700;font-size:.95rem;padding:7px 14px;border-radius:999px;align-self:flex-start}
 
   /* STEPS */
   .steps{display:grid;gap:0}
-  .step{display:grid;grid-template-columns:54px 1fr;gap:22px;padding:22px 0;border-bottom:1px solid var(--line)}
+  .step{display:grid;grid-template-columns:46px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);align-items:start}
   .step:last-child{border-bottom:none}
-  .step .n{font-family:"Fraunces",serif;font-size:1.4rem;color:var(--accent);font-weight:500}
-  .step p{font-size:.98rem}
-  code{background:var(--paper-2);padding:2px 6px;border-radius:5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var(--ink)}
+  .step .ic{width:46px;height:46px;border-radius:11px;background:var(--accent-weak);display:flex;align-items:center;justify-content:center}
+  .step .ic svg{width:24px;height:24px;stroke:var(--accent);fill:none;stroke-width:1.8}
+  .step h3{display:flex;align-items:center;gap:10px}
+  .step .n{font-weight:700;font-size:1rem;color:var(--accent);background:#fff;border:1px solid var(--accent);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .step p{font-size:.98rem;margin-top:4px}
 
   /* FEATURES (restrained bento) */
   .feat{display:grid;grid-template-columns:1fr 1fr;gap:0}
   .feat .cell{padding:24px 26px 24px 0;border-top:1px solid var(--line)}
   .feat .cell:nth-child(odd){padding-right:30px}
   .feat .cell:nth-child(even){padding-left:30px;border-left:1px solid var(--line)}
-  .feat .cell p{font-size:.95rem;color:var(--ink-soft)}
+  .feat .cell p{font-size:.95rem;color:var(--ink-soft);margin-top:8px}
+  .feat .f-ic{width:34px;height:34px;margin-bottom:12px;stroke:var(--accent);fill:none;stroke-width:1.7}
 
   /* CALC */
   .calc{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:30px}
@@ -107,17 +150,18 @@
   .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent)}
   .out{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
   .obox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
-  .obox .big{font-family:"Fraunces",serif;font-size:1.7rem;font-weight:500;line-height:1.1}
+  .obox .big{font-weight:700;font-size:1.6rem;line-height:1.15}
   .obox .lbl{font-size:.74rem;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
   .obox .save{color:var(--accent)}
   .note{font-size:.82rem;color:var(--mut);margin-top:14px}
+  code{background:var(--paper-2);padding:2px 6px;border-radius:5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var(--ink)}
 
   /* PRICING */
   .price{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .ptier{background:#fff;border:1px solid var(--line);border-radius:13px;padding:26px 24px;display:flex;flex-direction:column}
   .ptier.feat{border:1px solid var(--accent);box-shadow:0 14px 36px -26px rgba(21,121,78,.6)}
   .ptier .tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
-  .ptier .pp{font-family:"Fraunces",serif;font-size:1.9rem;font-weight:500;margin:4px 0 2px}
+  .ptier .pp{font-weight:700;font-size:1.75rem;margin:4px 0 2px}
   .ptier ul{list-style:none;margin:14px 0 0;font-size:.92rem;color:var(--ink-soft)}
   .ptier li{margin:9px 0;padding-left:20px;position:relative}
   .ptier li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--accent-weak);border:1.5px solid var(--accent)}
@@ -131,8 +175,16 @@
   .pov .trow{display:grid;grid-template-columns:26px 1fr;gap:12px;margin:16px 0;align-items:start}
   .pov .trow .ic{color:var(--term-grn);font-weight:700}
   .pov .trow b{color:#fff}
-  .pov .quote{font-family:"Fraunces",serif;font-size:1.25rem;line-height:1.45;color:#fff;margin:0 0 6px}
+  .pov .quote{font-weight:600;font-size:1.15rem;line-height:1.5;color:#fff;margin:0 0 6px}
   .pov .small{font-size:.85rem;color:var(--term-dim);margin-top:22px;border-top:1px solid #34322c;padding-top:18px}
+  .pov .res-diagram{background:#fff;border-radius:12px;padding:18px;margin:22px 0}
+  .pov .res-diagram svg{width:100%;height:auto;display:block}
+  .rd-box{fill:#fff;stroke:var(--line-strong);stroke-width:1.5}
+  .rd-box-acc{fill:var(--accent-weak);stroke:var(--accent);stroke-width:1.5}
+  .rd-line{stroke:var(--mut);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+  .rd-line-s{stroke:var(--accent);stroke-width:1.5;fill:none}
+  .rd-t{font:600 13px Inter,sans-serif;fill:var(--ink)}
+  .rd-ts{font:400 11px Inter,sans-serif;fill:var(--mut)}
 
   /* FAQ */
   details{border-bottom:1px solid var(--line);padding:4px 0}
@@ -178,6 +230,8 @@
     form .grid2{grid-template-columns:1fr}
     .pov{padding:30px 22px}
     .calc{padding:22px}
+    .ba{grid-template-columns:1fr;gap:12px}
+    .ba .arrow{transform:rotate(90deg);padding:4px 0}
   }
 </style>
 </head>
@@ -212,6 +266,37 @@
 <span class="dim">  Potential saving</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="grn">up to 96%</span><br>
 <span class="dim">  Recommended</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S2 · routing setup
     </div>
+
+    <!-- MODEL BADGES -->
+    <div class="badges-wrap">
+      <div class="badges-cap">Works with the models you already call</div>
+      <div class="badges">
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/></svg>
+          DeepSeek
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9 9.5h4.2a2 2 0 010 4H10m0 0h3.5a2 2 0 010 4H9"/></svg>
+          Kimi
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7.5 9.5h5.5a2.5 2.5 0 010 5H9"/></svg>
+          Qwen
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.2 5.6L20 9.2l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.6z"/></svg>
+          OpenAI
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 9c0-2 3-3 7-3s7 1 7 3-3 3-7 3-7-1-7-3zM5 9v6c0 2 3 3 7 3s7-1 7-3V9M5 15v3c0 2 3 3 7 3s7-1 7-3v-3"/></svg>
+          Anthropic
+        </span>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h6v6H9z"/></svg>
+          LiteLLM <span class="sub">gateway</span>
+        </span>
+      </div>
+    </div>
   </div>
 
   <!-- METRICS -->
@@ -221,6 +306,92 @@
     <div class="m"><div class="num">1 line</div><div class="lab">of code to integrate (change <code style="background:transparent;padding:0;color:var(--ink)">base_url</code>)</div></div>
   </div>
 
+  <!-- ARCHITECTURE DIAGRAM -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">What we deploy</div>
+      <h2>One gateway. Every model. Your rules.</h2>
+      <p class="sub2" style="color:var(--mut);font-size:.95rem">A self-hosted LiteLLM gateway sits between your app and the model providers. It routes each call by task type, applies quality gates, and falls back to a flagship model only when a task truly needs it. You point <code style="background:var(--paper-2);padding:2px 6px;border-radius:5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;color:var(--ink)">base_url</code> at it — nothing else in your code changes.</p>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 780 400" role="img" aria-label="Architecture: your app connects to an AI cost gateway that routes to DeepSeek, Kimi, Qwen, and falls back to GPT or Claude">
+        <defs>
+          <marker id="arw" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9 z" fill="#857f74"/>
+          </marker>
+          <marker id="arwA" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9 z" fill="#15794e"/>
+          </marker>
+        </defs>
+
+        <!-- App node -->
+        <rect class="node" x="20" y="160" width="150" height="80" rx="12"/>
+        <text class="t-title" x="95" y="192" text-anchor="middle">Your app</text>
+        <text class="t-sub" x="95" y="212" text-anchor="middle">LLM API calls</text>
+
+        <!-- Gateway node -->
+        <rect class="node-gw" x="255" y="120" width="190" height="160" rx="14"/>
+        <text class="t-acc" x="350" y="158" text-anchor="middle">AI Cost Gateway</text>
+        <text class="t-sub" x="350" y="178" text-anchor="middle">LiteLLM · task router</text>
+        <line x1="275" y1="194" x2="425" y2="194" stroke="#15794e" stroke-width="1" opacity=".35"/>
+        <text class="t-lbl" x="350" y="214" text-anchor="middle">quality gate + budget cap</text>
+        <text class="t-lbl" x="350" y="232" text-anchor="middle">route by task type</text>
+        <text class="t-lbl" x="350" y="250" text-anchor="middle">fallback on low confidence</text>
+        <text class="t-lbl" x="350" y="268" text-anchor="middle">BYOK · zero key exposure</text>
+
+        <!-- Model nodes -->
+        <rect class="node" x="585" y="40" width="175" height="62" rx="11"/>
+        <text class="t-title" x="672" y="68" text-anchor="middle">DeepSeek</text>
+        <text class="t-sub" x="672" y="88" text-anchor="middle">cheap tasks · $0.14/M</text>
+
+        <rect class="node" x="585" y="120" width="175" height="62" rx="11"/>
+        <text class="t-title" x="672" y="148" text-anchor="middle">Kimi K2.6</text>
+        <text class="t-sub" x="672" y="168" text-anchor="middle">balanced · $0.95/M</text>
+
+        <rect class="node" x="585" y="200" width="175" height="62" rx="11"/>
+        <text class="t-title" x="672" y="228" text-anchor="middle">Qwen</text>
+        <text class="t-sub" x="672" y="248" text-anchor="middle">open-weight option</text>
+
+        <rect class="node-fb" x="585" y="280" width="175" height="62" rx="11"/>
+        <text class="t-fb" x="672" y="308" text-anchor="middle">GPT / Claude</text>
+        <text class="t-sub" x="672" y="328" text-anchor="middle">fallback only · hard tasks</text>
+
+        <!-- Connectors -->
+        <path class="conn" d="M170 200 L249 200" marker-end="url(#arw)"/>
+        <path class="conn-ac" d="M445 170 C510 120, 520 78, 580 71" marker-end="url(#arwA)"/>
+        <path class="conn-ac" d="M445 195 C515 160, 520 155, 580 151" marker-end="url(#arwA)"/>
+        <path class="conn-ac" d="M445 220 C515 220, 520 235, 580 231" marker-end="url(#arwA)"/>
+        <path class="conn" d="M445 248 C515 280, 520 312, 580 311" marker-end="url(#arw)" stroke-dasharray="5 4"/>
+
+        <!-- Output label -->
+        <text class="t-lbl" x="510" y="100" text-anchor="middle" transform="rotate(-18 510 100)">by difficulty</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- BEFORE / AFTER -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">The difference</div>
+      <h2>Same output. A tenth of the bill.</h2>
+    </div>
+    <div class="ba">
+      <div class="panel before">
+        <div class="tag">Before · as-is</div>
+        <div class="amt">$2,140<span style="font-size:1rem;font-weight:600"> /mo</span></div>
+        <div class="desc">Everything on GPT-4o — including the 80% of calls that never needed a flagship model.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="panel after">
+        <div class="tag">After · routed</div>
+        <div class="amt">$86<span style="font-size:1rem;font-weight:600"> /mo</span></div>
+        <div class="desc">Routine calls move to DeepSeek; GPT-4o stays only for the tasks that require it.</div>
+        <span class="savebadge">96% lower</span>
+      </div>
+    </div>
+    <p class="note">Real numbers from the open-source CLI on a sample 50M-prompt / 20M-completion month at public 2026-07 list rates. Your mix will differ — the CLI measures yours, not a guess.</p>
+  </section>
+
   <!-- HOW IT WORKS -->
   <section>
     <div class="sec-head">
@@ -228,9 +399,18 @@
       <h2>Three steps. No rebuild.</h2>
     </div>
     <div class="steps">
-      <div class="step"><div class="n">1</div><div><h3>Audit your traffic</h3><p>We map your real API calls, tag each task type, and show exactly where you're overpaying — a written report with numbers, not vibes.</p></div></div>
-      <div class="step"><div class="n">2</div><div><h3>Deploy a one-line gateway</h3><p>A self-hosted LiteLLM gateway routes by task type, with quality gates and automatic fallback to a flagship model when a task truly needs it. You change <code>base_url</code> — nothing else in your code.</p></div></div>
-      <div class="step"><div class="n">3</div><div><h3>We tune it monthly</h3><p>As models and prices shift, we re-route and re-tune so your bill stays low without you babysitting it. Quality gates and budget caps included.</p></div></div>
+      <div class="step">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/><path d="M3 19h18"/></svg></div>
+        <div><h3><span class="n">1</span>Audit your traffic</h3><p>We map your real API calls, tag each task type, and show exactly where you're overpaying — a written report with numbers, not vibes.</p></div>
+      </div>
+      <div class="step">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v6m0 0l-3-3m3 3l3-3"/><circle cx="12" cy="15" r="6"/><path d="M9.5 15h5M12 12.5v5"/></svg></div>
+        <div><h3><span class="n">2</span>Deploy a one-line gateway</h3><p>A self-hosted LiteLLM gateway routes by task type, with quality gates and automatic fallback to a flagship model when a task truly needs it. You change <code>base_url</code> — nothing else in your code.</p></div>
+      </div>
+      <div class="step">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 17a8 8 0 0116 0"/><path d="M12 17l4-4m-4 4l-4-4"/><circle cx="12" cy="17" r="1.5"/></svg></div>
+        <div><h3><span class="n">3</span>We tune it monthly</h3><p>As models and prices shift, we re-route and re-tune so your bill stays low without you babysitting it. Quality gates and budget caps included.</p></div>
+      </div>
     </div>
   </section>
 
@@ -241,10 +421,22 @@
       <h2>Engineered for the parts that usually break.</h2>
     </div>
     <div class="feat">
-      <div class="cell"><h3>Smart routing</h3><p>Each call goes to the cheapest model that meets your quality bar — simple tasks on DeepSeek/Kimi, hard ones on GPT/Claude only when required.</p></div>
-      <div class="cell"><h3>Quality gates</h3><p>Automatic fallback to a flagship model on low-confidence or failing responses, so output quality never silently drops.</p></div>
-      <div class="cell"><h3>Budget caps</h3><p>Per-key <code>max_budget</code> hard limits. No surprise spikes, no open-ended exposure.</p></div>
-      <div class="cell"><h3>BYOK, multi-model</h3><p>Bring your own DeepSeek / Kimi / Qwen / OpenAI / Anthropic keys. Your provider bills you; we never touch your keys.</p></div>
+      <div class="cell">
+        <svg class="f-ic" viewBox="0 0 24 24"><path d="M6 4v16M6 12h12M18 4v16"/><path d="M6 8h12M6 16h12"/></svg>
+        <h3>Smart routing</h3><p>Each call goes to the cheapest model that meets your quality bar — simple tasks on DeepSeek/Kimi, hard ones on GPT/Claude only when required.</p>
+      </div>
+      <div class="cell">
+        <svg class="f-ic" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3>Quality gates</h3><p>Automatic fallback to a flagship model on low-confidence or failing responses, so output quality never silently drops.</p>
+      </div>
+      <div class="cell">
+        <svg class="f-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/><path d="M9 9.5h4.5a2 2 0 010 4H10"/></svg>
+        <h3>Budget caps</h3><p>Per-key <code>max_budget</code> hard limits. No surprise spikes, no open-ended exposure.</p>
+      </div>
+      <div class="cell">
+        <svg class="f-ic" viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M11 12h9M16 9l3 3-3 3"/></svg>
+        <h3>BYOK, multi-model</h3><p>Bring your own DeepSeek / Kimi / Qwen / OpenAI / Anthropic keys. Your provider bills you; we never touch your keys.</p>
+      </div>
     </div>
   </section>
 
@@ -335,6 +527,34 @@
       <div class="eyebrow">Our stance</div>
       <p class="quote">We tell you exactly where your prompts go. Most providers won't.</p>
       <p style="margin-bottom:6px">Routing to cheaper models means some traffic leaves your environment. We put the data path in writing before any work begins — no surprises, no fine print.</p>
+
+      <div class="res-diagram">
+        <svg viewBox="0 0 760 250" role="img" aria-label="Data residency: prompts can route to cloud APIs or stay self-hosted on your infrastructure">
+          <!-- Your environment -->
+          <rect class="rd-box" x="20" y="70" width="200" height="110" rx="12"/>
+          <text class="rd-t" x="120" y="108" text-anchor="middle">Your environment</text>
+          <text class="rd-ts" x="120" y="128" text-anchor="middle">prompts originate here</text>
+          <text class="rd-ts" x="120" y="148" text-anchor="middle">🔒 keys never leave</text>
+
+          <!-- Cloud route (dashed) -->
+          <path class="rd-line" d="M220 110 C330 90, 360 60, 470 55"/>
+          <rect class="rd-box" x="470" y="20" width="270" height="78" rx="11"/>
+          <text class="rd-t" x="605" y="52" text-anchor="middle">Cloud API</text>
+          <text class="rd-ts" x="605" y="72" text-anchor="middle">DeepSeek · Kimi · Qwen</text>
+          <text class="rd-ts" x="605" y="90" text-anchor="middle">Asia-region servers</text>
+
+          <!-- Self-host route (solid) -->
+          <path class="rd-line-s" d="M220 150 C330 175, 340 200, 430 205"/>
+          <rect class="rd-box-acc" x="430" y="170" width="310" height="78" rx="11"/>
+          <text class="rd-t" x="585" y="200" text-anchor="middle">Self-hosted open-weight</text>
+          <text class="rd-ts" x="585" y="220" text-anchor="middle">your infra · zero egress</text>
+          <text class="rd-ts" x="585" y="238" text-anchor="middle">🔒 nothing leaves your environment</text>
+
+          <!-- legend -->
+          <text class="rd-ts" x="20" y="235" style="font:500 11px Inter,sans-serif;fill:#857f74">— ┄ cloud route (cheap, data leaves) · —— self-host route (your control)</text>
+        </svg>
+      </div>
+
       <div class="trow"><div class="ic">✓</div><div><p><b>Bring-your-own-keys.</b> We never see your provider API keys. Your provider bills you directly.</p></div></div>
       <div class="trow"><div class="ic">✓</div><div><p><b>Prompts aren't stored</b> after delivery. No training on your data, ever.</p></div></div>
       <div class="trow"><div class="ic">✓</div><div><p><b>Open-source, auditable.</b> The gateway is LiteLLM (Apache-2.0). You can read every line we deploy.</p></div></div>
