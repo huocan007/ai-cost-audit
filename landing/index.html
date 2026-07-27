@@ -882,12 +882,14 @@
         return r.json();
       }).then(function(json){
         if(json.success || json.submission_id){
+          var fname = (data.name || "there").trim() || "there";
+          var femail = (data.email || "you").trim() || "you";
           form.style.display = "none";
           msg.style.display = "block";
           msg.style.background = "var(--accent-weak)";
           msg.style.border = "1px solid var(--accent)";
           msg.style.color = "var(--ink)";
-          msg.innerHTML = "✓ Thanks — your inquiry is in. We'll reply within 2 business days with a rough saving estimate.";
+          msg.innerHTML = "✓ Thanks, " + fname + "! Your inquiry is in. We'll email <strong>" + femail + "</strong> within 2 business days with a rough saving estimate. Check your inbox (and spam folder) — we'll be in touch soon.";
         } else {
           throw new Error(json.message || "Server rejected");
         }
