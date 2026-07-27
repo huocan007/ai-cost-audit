@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 7 Cheapest LLMs in 2026 (Verified Per-Million-Token Pricing)</title>
+<meta name="description" content="As of July 2026, DeepSeek V4 Flash is the cheapest production-grade LLM at $0.14 in / $0.28 out per 1M tokens — up to 89× cheaper than Claude Opus 4.8 on output. Verified ranking with official pricing sources.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315794e'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Arial,sans-serif' font-weight='bold'%3E%24%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="The 7 Cheapest LLMs in 2026 (Verified Pricing)">
+<meta property="og:description" content="DeepSeek V4 Flash is the cheapest production LLM at $0.14/$0.28 per 1M tokens — up to 89× cheaper than Claude Opus 4.8. Full ranking with official sources.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://ai.acan.ccwu.cc/cheapest-llms-2026.html">
+<meta property="og:image" content="https://ai.acan.ccwu.cc/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ai.acan.ccwu.cc/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf8f5;
+    --paper-2:#f3efe8;
+    --ink:#1b1a17;
+    --ink-soft:#46433c;
+    --mut:#857f74;
+    --line:#e6e0d6;
+    --line-strong:#d6cebf;
+    --accent:#15794e;
+    --accent-weak:#e7f1ea;
+    --term-bg:#1b1a17;
+    --term-txt:#e9e4d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    padding:0 22px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 0 80px}
+  h1,h2,h3{font-family:"Inter",sans-serif;font-weight:700;letter-spacing:-0.02em;color:var(--ink)}
+  h1{font-size:clamp(2.1rem,5vw,3.2rem);line-height:1.08;margin-bottom:18px}
+  h2{font-size:clamp(1.5rem,3vw,2rem);line-height:1.2;margin-bottom:14px;margin-top:8px}
+  h3{font-size:1.12rem;margin-bottom:6px}
+  p{color:var(--ink-soft)}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+  .lead{font-size:1.16rem;color:var(--ink-soft);max-width:40rem;margin-bottom:30px}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:26px 0;border-bottom:1px solid var(--line);margin-bottom:54px}
+  .logo{font-weight:700;font-size:1.05rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:9px}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+  nav .gh{font-size:.92rem;color:var(--mut);font-weight:500}
+  nav .gh:hover{color:var(--accent);text-decoration:none}
+
+  /* ANSWER CAPSULE (GEO: 40-60 word direct answer) */
+  .capsule{background:var(--accent-weak);border:1px solid var(--accent);border-radius:14px;padding:22px 24px;margin:8px 0 38px;font-size:1.05rem;line-height:1.65;color:var(--ink)}
+  .capsule b{color:var(--accent)}
+
+  /* METRICS */
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 56px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .metrics .m{padding:28px 22px;border-right:1px solid var(--line)}
+  .metrics .m:last-child{border-right:none}
+  .metrics .num{font-weight:800;font-size:1.9rem;color:var(--ink);line-height:1.1}
+  .metrics .lab{font-size:.84rem;color:var(--mut);margin-top:8px;line-height:1.4}
+
+  /* TABLE */
+  .res-table{width:100%;border-collapse:collapse;margin:18px 0 14px;font-size:.92rem}
+  .res-table th,.res-table td{text-align:left;padding:14px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .res-table th{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);font-weight:600}
+  .res-table td{color:var(--ink-soft)}
+  .res-table .rk{font-weight:700;color:var(--accent);font-size:1.05rem;white-space:nowrap;width:34px}
+  .res-table .mdl{font-weight:600;color:var(--ink);white-space:nowrap}
+  .res-table .price{font-weight:700;color:var(--ink);white-space:nowrap}
+  .res-table .src a{font-size:.82rem}
+  .res-table tbody tr:last-child td{border-bottom:none}
+  .res-table .note{font-size:.78rem;color:var(--mut)}
+  .table-note{font-size:.82rem;color:var(--mut);margin-top:6px}
+
+  /* QUOTE (GEO: expert attribution) */
+  .quote{background:var(--ink);color:#e9e4d8;border-radius:14px;padding:26px 30px;margin:22px 0}
+  .quote .q{font-weight:600;font-size:1.08rem;line-height:1.55;color:#fff;margin:0 0 10px}
+  .quote .by{font-size:.86rem;color:var(--term-txt);opacity:.85}
+  .quote .by a{color:var(--term-txt);text-decoration:underline}
+
+  /* BEFORE/AFTER */
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin:24px 0 10px}
+  .ba .panel{padding:24px;border-radius:14px;display:flex;flex-direction:column;justify-content:center}
+  .ba .before{background:#fbeee9;border:1px solid #f0c9bd}
+  .ba .after{background:var(--accent-weak);border:1px solid var(--accent)}
+  .ba .tag{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+  .ba .before .tag{color:#b4553f}
+  .ba .after .tag{color:var(--accent)}
+  .ba .amt{font-weight:800;font-size:1.9rem;line-height:1.05}
+  .ba .before .amt{color:#b4553f}
+  .ba .after .amt{color:var(--accent)}
+  .ba .desc{font-size:.86rem;color:var(--mut);margin-top:6px}
+  .ba .arrow{display:flex;align-items:center;justify-content:center;padding:0 16px;font-size:1.8rem;color:var(--mut);font-weight:300}
+
+  /* CALLOUT */
+  .warn{background:#fbeee9;border:1px solid #f0c9bd;border-radius:12px;padding:18px 20px;margin:20px 0;font-size:.94rem;color:#7a4434}
+  .warn b{color:#b4553f}
+
+  /* FAQ */
+  details{border-bottom:1px solid var(--line);padding:4px 0}
+  summary{cursor:pointer;font-weight:500;font-size:1.02rem;padding:16px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--mut);font-size:1.4rem;font-weight:400;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{font-size:.95rem;color:var(--ink-soft);padding:0 0 18px;max-width:42rem}
+
+  /* FINAL CTA */
+  .final{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:34px 32px;margin:48px 0 0;text-align:center}
+  .final h2{margin-bottom:8px}
+  .final .sub2{color:var(--mut);font-size:.98rem;margin-bottom:22px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;font-weight:600;font-size:1rem;padding:13px 26px;border-radius:9px;text-decoration:none;transition:background .15s ease}
+  .btn:hover{background:#0f5e3c;text-decoration:none}
+
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:26px;color:var(--mut);font-size:.85rem;line-height:1.7}
+  footer a{color:var(--mut)}
+
+  @media (max-width:680px){
+    body{padding:0 18px;font-size:16px}
+    nav{margin-bottom:38px;padding:20px 0}
+    .metrics{grid-template-columns:1fr}
+    .metrics .m{border-right:none;border-bottom:1px solid var(--line)}
+    .metrics .m:last-child{border-bottom:none}
+    .ba{grid-template-columns:1fr;gap:12px}
+    .ba .arrow{transform:rotate(90deg);padding:4px 0}
+    .res-table th,.res-table td{padding:11px 9px;font-size:.82rem}
+    .quote{padding:22px 20px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="logo"><span class="dot"></span> AI Cost Audit</div>
+  <a class="gh" href="https://github.com/huocan007/ai-cost-audit">GitHub &#8599;</a>
+</nav>
+
+<header>
+  <div class="eyebrow">LLM Pricing Report &middot; Updated 2026-07-27</div>
+  <h1>The 7 Cheapest LLMs in 2026</h1>
+  <p class="lead">A verified, source-linked ranking of the lowest-cost production LLM APIs per million tokens &mdash; with the real savings teams are reporting and the caveats that actually matter.</p>
+
+  <div class="capsule">
+    <b>Bottom line:</b> As of July 2026, the cheapest production-grade LLM is <b>DeepSeek V4 Flash at $0.14 in / $0.28 out per 1M tokens</b> &mdash; up to <b>89&times; cheaper than Claude Opus 4.8</b> on output. Routing non-frontier traffic to low-cost models cuts typical API bills by 70&ndash;90% with no prompt changes.
+  </div>
+
+  <div class="metrics">
+    <div class="m"><div class="num">89&times;</div><div class="lab">cheaper output vs Claude Opus 4.8 ($0.28 vs $25 / 1M)</div></div>
+    <div class="m"><div class="num">$0.28</div><div class="lab">DeepSeek V4 Flash cost per 1M output tokens</div></div>
+    <div class="m"><div class="num">60&ndash;80%</div><div class="lab">average token-price drop since early 2025 (AI Pricing Guru)</div></div>
+  </div>
+</header>
+
+<section>
+  <h2>What are the cheapest LLMs right now?</h2>
+  <p>Ranked by blended cost (output price weighted, since output tokens cost 3&ndash;5&times; more than input). All figures are standard, non-peak list prices in USD per 1 million tokens, verified against each provider's official pricing page on 2026-07-27. Every row links to its source.</p>
+
+  <table class="res-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Model</th>
+        <th>Provider</th>
+        <th>In / 1M</th>
+        <th>Out / 1M</th>
+        <th>Context</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rk">1</td>
+        <td class="mdl">DeepSeek V4 Flash</td>
+        <td>DeepSeek</td>
+        <td class="price">$0.14</td>
+        <td class="price">$0.28</td>
+        <td>1M</td>
+        <td class="src"><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="rk">2</td>
+        <td class="mdl">Gemini 2.5 Flash</td>
+        <td>Google</td>
+        <td class="price">$0.30</td>
+        <td class="price">$2.50</td>
+        <td>1M</td>
+        <td class="src"><a href="https://ai.google.dev/pricing" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="rk">3</td>
+        <td class="mdl">Kimi K2.6</td>
+        <td>Moonshot</td>
+        <td class="price">$0.95</td>
+        <td class="price">$4.00</td>
+        <td>256K</td>
+        <td class="src"><a href="https://platform.moonshot.ai/docs/pricing/chat-k26" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="rk">4</td>
+        <td class="mdl">Claude Haiku 4.5</td>
+        <td>Anthropic</td>
+        <td class="price">$1.00</td>
+        <td class="price">$5.00</td>
+        <td>200K</td>
+        <td class="src"><a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="rk">5</td>
+        <td class="mdl">GPT-4.1</td>
+        <td>OpenAI</td>
+        <td class="price">$2.00</td>
+        <td class="price">$8.00</td>
+        <td>1M</td>
+        <td class="src"><a href="https://platform.openai.com/docs/pricing" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="rk">6</td>
+        <td class="mdl">GPT-4o</td>
+        <td>OpenAI</td>
+        <td class="price">$2.50</td>
+        <td class="price">$10.00</td>
+        <td>128K</td>
+        <td class="src"><a href="https://platform.openai.com/docs/pricing" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+      <tr>
+        <td class="rk">7</td>
+        <td class="mdl">Claude Sonnet 4.6</td>
+        <td>Anthropic</td>
+        <td class="price">$3.00</td>
+        <td class="price">$15.00</td>
+        <td>200K</td>
+        <td class="src"><a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener">official &#8599;</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="table-note">For comparison, the most expensive mainstream model, <b>Claude Opus 4.8</b>, lists at <b>$5.00 in / $25.00 out</b> per 1M (<a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener">official &#8599;</a>). Cache hits cut input cost ~90% on most providers, narrowing but not closing the gap.</p>
+</section>
+
+<section>
+  <h2>How much can routing actually save you?</h2>
+  <p>Most teams overpay not because frontier models are expensive, but because they run a frontier model on work a budget model handles fine. Independent analyses put the savings from smart routing at 70&ndash;90%.</p>
+
+  <div class="quote">
+    <p class="q">&ldquo;DeepSeek V4 Pro&rsquo;s performance on core AI metrics is on par with Claude Sonnet 4.6, while priced well below GPT-5.5.&rdquo;</p>
+    <p class="by">&mdash; Citi research note, cited in <a href="https://www.stcn.com/article/detail/3843067.html" target="_blank" rel="noopener">Securities Times (2026-04)</a></p>
+  </div>
+
+  <div class="quote">
+    <p class="q">&ldquo;Most teams overpay not because frontier models are expensive, but because they use a frontier model for work a $0.15 model handles fine.&rdquo;</p>
+    <p class="by">&mdash; <a href="https://cloudmart.dev/blog/llm-api-pricing-2026" target="_blank" rel="noopener">CloudMart token-pricing analysis (2026-07)</a></p>
+  </div>
+
+  <div class="ba">
+    <div class="panel before">
+      <div class="tag">All traffic &middot; Opus 4.8</div>
+      <div class="amt">$25.00</div>
+      <div class="desc">per 1M output tokens, list price</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="panel after">
+      <div class="tag">Routed &middot; DeepSeek V4 Flash</div>
+      <div class="amt">$0.28</div>
+      <div class="desc">per 1M output tokens, list price</div>
+    </div>
+  </div>
+  <p class="table-note">Same prompts, same output &mdash; an <b>89&times; reduction</b> on output tokens. Real bills land lower because caching and batching apply on both sides, but the order of magnitude holds.</p>
+</section>
+
+<section>
+  <h2>What does &ldquo;cheapest&rdquo; miss?</h2>
+  <p>Price is not capability. Three caveats change the math in 2026:</p>
+
+  <h3>1. Peak-hour surcharges</h3>
+  <p>DeepSeek introduced peak/off-peak pricing in July 2026: V4 Flash input <b>doubles during 09:00&ndash;12:00 and 14:00&ndash;18:00</b> (Beijing time) &mdash; from $0.14 to $0.28 input, $0.28 to $0.56 output. A cost router should shift load off peak windows.</p>
+
+  <h3>2. The &ldquo;budget&rdquo; label expired on some models</h3>
+  <p><b>Kimi K3</b> (released 2026-07-16) lists at <b>$3.00 / $15.00</b> &mdash; 3.2&times; its predecessor K2.6 on input and 3.75&times; on output (<a href="https://tokencost.app/blog/kimi-k3-pricing" target="_blank" rel="noopener">Tokencost analysis &#8599;</a>). Treat &ldquo;cheap Chinese model&rdquo; as a per-model fact, not a region assumption.</p>
+
+  <h3>3. Quality still varies by task</h3>
+  <p>For frontier coding and complex agentic work, Claude Sonnet 4.6 / Opus 4.8 and GPT-4.1 still lead verified benchmarks. The winning pattern is <b>routing by task</b>: budget models for classification, extraction, and high-volume chat; frontier models only where quality is load-bearing.</p>
+</section>
+
+<section>
+  <h2>Is it safe to route to low-cost models?</h2>
+  <p>Yes &mdash; with one hard rule on data residency. Low-cost inference is concentrated in Asia (DeepSeek, Kimi), while Western and self-hosted tiers exist for sensitive data.</p>
+  <div class="warn">
+    <b>Compliance guardrail:</b> Do not route EU user PII or regulated data through Asia-region endpoints. Keep a Western-cloud or self-hosted tier for that traffic. This is a data-residency requirement, not a model-quality claim.
+  </div>
+  <p>A proper cost-routing gateway (e.g. LiteLLM) lets you set per-route residency policies so the cheap model is used only where the data is allowed to go.</p>
+</section>
+
+<section>
+  <h2>Frequently asked questions</h2>
+
+  <details>
+    <summary>What is the absolute cheapest LLM in 2026?</summary>
+    <p>DeepSeek V4 Flash, at $0.14 per 1M input and $0.28 per 1M output tokens (standard, non-peak pricing, verified 2026-07-27 against the official DeepSeek pricing page). Cache-hit input drops to $0.0028 per 1M. Note peak-hour surcharges double price during China business hours.</p>
+  </details>
+
+  <details>
+    <summary>How much can I save by routing LLM traffic?</summary>
+    <p>Teams that route non-frontier tasks to low-cost models typically report 70&ndash;90% lower API bills with no prompt changes. The extreme case: output on Claude Opus 4.8 ($25/1M) vs DeepSeek V4 Flash ($0.28/1M) is an 89&times; difference. Caching and batching narrow it but the order of magnitude holds.</p>
+  </details>
+
+  <details>
+    <summary>Is DeepSeek safe for EU or regulated user data?</summary>
+    <p>It depends on the route. Asia-region endpoints are not appropriate for EU PII or regulated data. Use a Western-cloud or self-hosted tier for that traffic, and configure your gateway with per-route data-residency policies. This is a compliance requirement, not a statement about model capability.</p>
+  </details>
+
+  <details>
+    <summary>Are these prices stable?</summary>
+    <p>No. LLM API prices moved 60&ndash;80% lower on average between early 2025 and mid-2026, but individual models also rose (e.g. Kimi K3 tripled K2.6's rate card). Always verify against the official pricing pages linked in the table above before making procurement decisions.</p>
+  </details>
+</section>
+
+<div class="final">
+  <h2>Want this computed for your own traffic?</h2>
+  <p class="sub2">Run a free audit on your real API logs, or get a gateway configured for you.</p>
+  <a class="btn" href="https://ai.acan.ccwu.cc/">Run the AI Cost Audit &rarr;</a>
+</div>
+
+<footer>
+  <p>Verified 2026-07-27 against official provider pricing pages. Prices change constantly &mdash; links above point to live sources. Part of the <a href="https://ai.acan.ccwu.cc/">AI Cost Audit</a> project.</p>
+  <p>Methodology: ranking by output price (output tokens cost 3&ndash;5&times; input). Sources: DeepSeek, Google, Moonshot, Anthropic, OpenAI official pricing pages; Citi via Securities Times; CloudMart; Tokencost.</p>
+</footer>
+
+</div>
+
+<!-- GEO: structured data for AI engines (FAQPage + Article) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The 7 Cheapest LLMs in 2026 (Verified Per-Million-Token Pricing)",
+  "description": "Verified ranking of the lowest-cost production LLM APIs per million tokens as of July 2026, with official sources and real-world savings.",
+  "datePublished": "2026-07-27",
+  "dateModified": "2026-07-27",
+  "author": {"@type": "Organization", "name": "AI Cost Audit"},
+  "mainEntityOfPage": "https://ai.acan.ccwu.cc/cheapest-llms-2026.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What is the absolute cheapest LLM in 2026?",
+     "acceptedAnswer": {"@type": "Answer", "text": "DeepSeek V4 Flash, at $0.14 per 1M input and $0.28 per 1M output tokens (standard, non-peak pricing, verified 2026-07-27). Cache-hit input drops to $0.0028 per 1M. Peak-hour surcharges double the price during China business hours."}},
+    {"@type": "Question", "name": "How much can I save by routing LLM traffic?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Teams that route non-frontier tasks to low-cost models typically report 70-90% lower API bills with no prompt changes. Output on Claude Opus 4.8 ($25/1M) vs DeepSeek V4 Flash ($0.28/1M) is an 89x difference."}},
+    {"@type": "Question", "name": "Is DeepSeek safe for EU or regulated user data?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Asia-region endpoints are not appropriate for EU PII or regulated data. Use a Western-cloud or self-hosted tier for that traffic and configure per-route data-residency policies in your gateway."}}
+  ]
+}
+</script>
+
+</body>
+</html>

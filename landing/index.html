@@ -282,6 +282,24 @@
     .res-table th,.res-table td{padding:11px 10px;font-size:.84rem}
   }
 </style>
+
+<!-- GEO: structured data for AI engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Why not just use OpenRouter or LiteLLM myself?", "acceptedAnswer": {"@type": "Answer", "text": "You can — and many do. The paid service is for teams that lack the time to wire routing, tune quality gates, and monitor budgets monthly. The CLI is free precisely so you can validate the number first."}},
+    {"@type": "Question", "name": "Do I have to change my application code?", "acceptedAnswer": {"@type": "Answer", "text": "No. The gateway is OpenAI-compatible. You point base_url at it; the rest of your code is unchanged."}},
+    {"@type": "Question", "name": "Will quality drop?", "acceptedAnswer": {"@type": "Answer", "text": "Not silently. Simple tasks move to cheaper models; hard tasks stay on a flagship via the quality gate plus fallback. You set the quality bar."}},
+    {"@type": "Question", "name": "Is this only for big spenders?", "acceptedAnswer": {"@type": "Answer", "text": "No. Even $100–500/mo bills often hide 50%+ waste on tasks that don't need a flagship. The free CLI tells you your number in under a minute."}},
+    {"@type": "Question", "name": "What if I'm worried about data going to China?", "acceptedAnswer": {"@type": "Answer", "text": "Two options: (1) self-host open-weight models on your own infrastructure, or (2) keep sensitive routes on Western flagship models. We document the data path per route before any work begins."}},
+    {"@type": "Question", "name": "I'm in the EU — can I still use this?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, with one rule. China has no GDPR adequacy decision, so EU personal data (PII) shouldn't be sent to Asia-region model servers without a transfer mechanism. For those workloads, choose the self-hosted open-weight mode or keep them on Western flagship models. Non-personal or non-regulated traffic can use the cheap route. We document your chosen paths before deployment."}},
+    {"@type": "Question", "name": "Do you store my prompts or train on my data?", "acceptedAnswer": {"@type": "Answer", "text": "No. We never store your prompts after delivery, and we never train on customer data. The gateway runs on infrastructure you control; your provider bills you directly via your own keys. You can read every line — it's LiteLLM (Apache-2.0)."}},
+    {"@type": "Question", "name": "Can the model provider access my data?", "acceptedAnswer": {"@type": "Answer", "text": "On the cloud cheap route, prompts are processed by DeepSeek, Kimi, or Qwen on their servers — that's the trade-off for the low price, and we state it plainly rather than hiding it. If that's unacceptable for a given workload, route it to self-hosted or Western flagship instead. You decide per route; nothing is automatic."}}
+  ]
+}
+</script>
 </head>
 <body>
 <div class="wrap">

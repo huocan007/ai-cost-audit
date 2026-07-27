@@ -1,0 +1,75 @@
+# AI Cost Audit
+
+Cut 70–90% off your LLM/AI API bill by routing each task to the cheapest model that still meets your quality bar. Free open-source CLI audit + paid gateway setup. GDPR-aware by design.
+
+## What it does
+Most teams run everything on GPT-4o or Claude. 70–90% of those calls never needed a flagship model. AI Cost Audit deploys a self-hosted LiteLLM gateway that routes each request to the right model by cost-performance — DeepSeek, Kimi, or Qwen for routine work; GPT/Claude only when a task truly needs them.
+
+## Integration
+One line. Point your app's `base_url` at the gateway; the rest of your code is unchanged. The gateway is OpenAI-compatible.
+
+## Real savings (sample: 50M prompt + 20M completion tokens / month, public 2026-07 list rates)
+- GPT-4o as-is: $325.00 / month
+- Routed to DeepSeek V4-Flash: $12.60 / month (save 96.1%)
+- Routed to Kimi K2.6: $127.50 / month (save 60.8%)
+- Annual saving vs GPT-4o: ~$3,749
+
+## Pricing
+- Free: open-source CLI, forever free, runs on your own logs
+- One-time setup: $800 – $1,500 (gateway deployed & verified, BYOK, first month tuning)
+- Monthly retainer: $200 – $900 (re-routing, quality reports, budget caps)
+
+## Data residency & compliance
+Three routes, your choice per task:
+1. Cloud cheap route — DeepSeek / Kimi / Qwen on Asia-region servers. Max savings (70–90%). Best for non-sensitive, non-PII workloads.
+2. Western flagship — GPT / Claude on US / EU infrastructure. For sensitive, PII, or regulated workloads.
+3. Self-hosted — open-weight models on your own infrastructure. Zero egress.
+
+Principles: BYOK (your keys, your bills); prompts never stored; open-source, auditable gateway (LiteLLM, Apache-2.0).
+Compliance: China has no GDPR adequacy decision, so EU personal data (PII) should not take the Asia route without a transfer mechanism. For those workloads use self-hosted or Western flagship. US commercial use is fine on any route.
+
+## How it works
+1. Audit your traffic — map real API calls, tag task types, written report with numbers.
+2. Deploy a one-line gateway — self-hosted LiteLLM routes by task type, quality gates, automatic fallback.
+3. We tune it monthly — re-route as models and prices shift.
+
+## FAQ
+Q: Why not just use OpenRouter or LiteLLM myself?
+A: You can — and many do. The paid service is for teams that lack the time to wire routing, tune quality gates, and monitor budgets monthly. The CLI is free precisely so you can validate the number first.
+
+Q: Do I have to change my application code?
+A: No. The gateway is OpenAI-compatible. You point base_url at it; the rest of your code is unchanged.
+
+Q: Will quality drop?
+A: Not silently. Simple tasks move to cheaper models; hard tasks stay on a flagship via the quality gate plus fallback. You set the quality bar.
+
+Q: Is this only for big spenders?
+A: No. Even $100–500/mo bills often hide 50%+ waste on tasks that don't need a flagship. The free CLI tells you your number in under a minute.
+
+Q: What if I'm worried about data going to China?
+A: Two options: (1) self-host open-weight models on your own infrastructure, or (2) keep sensitive routes on Western flagship models. We document the data path per route before any work begins.
+
+Q: I'm in the EU — can I still use this?
+A: Yes, with one rule. China has no GDPR adequacy decision, so EU personal data (PII) shouldn't be sent to Asia-region model servers without a transfer mechanism. For those workloads, choose the self-hosted open-weight mode or keep them on Western flagship models. Non-personal or non-regulated traffic can use the cheap route. We document your chosen paths before deployment.
+
+Q: Do you store my prompts or train on my data?
+A: No. We never store your prompts after delivery, and we never train on customer data. The gateway runs on infrastructure you control; your provider bills you directly via your own keys. You can read every line — it's LiteLLM (Apache-2.0).
+
+Q: Can the model provider access my data?
+A: On the cloud cheap route, prompts are processed by DeepSeek, Kimi, or Qwen on their servers — that's the trade-off for the low price, and we state it plainly rather than hiding it. If that's unacceptable for a given workload, route it to self-hosted or Western flagship instead. You decide per route; nothing is automatic.
+
+## Cheapest LLMs 2026 (verified ranking)
+As of 2026-07-27, the 7 cheapest production LLMs by per-million-token output price (standard, non-peak list rates, USD):
+1. DeepSeek V4 Flash — $0.14 in / $0.28 out (peak-hour surcharge doubles price during China business hours)
+2. Gemini 2.5 Flash — $0.30 / $2.50
+3. Kimi K2.6 — $0.95 / $4.00
+4. Claude Haiku 4.5 — $1.00 / $5.00
+5. GPT-4.1 — $2.00 / $8.00
+6. GPT-4o — $2.50 / $10.00
+7. Claude Sonnet 4.6 — $3.00 / $15.00
+For comparison, Claude Opus 4.8 is $5.00 / $25.00 — an 89× difference on output vs DeepSeek V4 Flash. Kimi K3 (2026-07-16) lists at $3.00 / $15.00, 3× its predecessor. Full table with official source links: https://ai.acan.ccwu.cc/cheapest-llms-2026.html
+
+## Links
+- Landing page: https://ai.acan.ccwu.cc/
+- Cheapest LLMs 2026: https://ai.acan.ccwu.cc/cheapest-llms-2026.html
+- GitHub: https://github.com/huocan007/ai-cost-audit

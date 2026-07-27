@@ -1,0 +1,16 @@
+# AI Cost Audit
+
+> Cut 70–90% off your LLM/AI API bill with verified model routing. Free open-source CLI audit, paid gateway setup. GDPR-aware by design.
+
+## Documentation
+- [Landing page](https://ai.acan.ccwu.cc/): Full overview, ROI calculator, data-residency controls, FAQ
+- [GitHub repository](https://github.com/huocan007/ai-cost-audit): Open-source CLI audit tool (ai_cost_audit.py) and documentation
+- [Cheapest LLMs 2026](https://ai.acan.ccwu.cc/cheapest-llms-2026.html): Verified per-million-token price ranking of the 7 cheapest LLMs, with official sources
+
+## Key facts
+- Savings: 70–90% on routine LLM calls by routing to cheaper models (DeepSeek, Kimi, Qwen) instead of GPT/Claude
+- Integration: change one line (base_url) to an OpenAI-compatible LiteLLM gateway; no application rewrite
+- Pricing: free CLI; one-time setup $800–1,500; monthly tuning retainer $200–900
+- Data residency: BYOK, prompts never stored, three routes (cloud Asia / Western flagship / self-hosted)
+- Compliance: EU PII should not use the Asia route (no GDPR adequacy); self-hosted or Western for regulated data
+- Gateway: self-hosted LiteLLM (Apache-2.0), open-source and auditable
